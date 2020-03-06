@@ -50,6 +50,8 @@ Guides
 
 Learn more about Corona by studying our current guides on selected topics.
 
+Howdy!
+
 </a>
 </div>
 
