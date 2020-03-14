@@ -15,27 +15,20 @@
 
 Returns a value that identifies the current frame, say for debugging or to handle at-most-once-per-frame actions.
 
-As an example of the latter, pathfinding might be too expensive to perform twice, or once and then not even use, so we can trigger it on demand
-and then reuse the result throughout the current frame. To do this, we only need to watch a single variable.
-
-ALSO enterFrame event as 'frame', but as free function can be used from timers or proxied transitions, too, without potential ordering concerns
-
-BLAH BLAH
-
-Determines if the device is capable of providing events for a given event source such as `"accelerometer"` or `"gyroscope"`.
-
-This function returns `true` if the event source exists, meaning it is okay to call [EventDispatcher:addEventListener()][api.type.EventDispatcher.addEventListener] to handle its events.
-
-It returns `false` if the event source does not exist. For example, if this returns false for `"gyroscope"` then this would indicate that the appropriate hardware was not found on the device.
-
-## Syntax
-
-	Runtime.getFrameID( )
+This is also available as ['frame'][api.event.enterFrame.frame] via enterFrame event listener functions.
 
 ## Example
-
+ 
 ``````lua
-if Runtime:hasEventSource( "gyroscope" ) then
-    Runtime:addEventListener( "gyroscope", myListener )
-end
+local frameID
+function updatePathfinding( ) -- might get called before any of our enterFrame event listener functions
+    local id = Runtime.getFrameID()
+
+    if id ~= frameID then -- frame is new?
+        frameID = id
+		doExpensivePathfinding() -- this might be too expensive to perform twice, or once and then not even use, so we only trigger it on demand
+		                         -- and then reuse the result for the rest of the frame
+	end
+end 
+timer.performWithDelay(100, updatePathfinding)
 ``````

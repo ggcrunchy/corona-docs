@@ -16,8 +16,8 @@ The time in milliseconds since the start of the application accessible by an ent
 ## Example
  
 ``````lua
-function printTimeSinceStart( )
-    print (Runtime.getFrameStartTime()/1000 .. " seconds since app started." )
+function printTimeSinceStart( event )
+    print (event.time/1000 .. " seconds since app started." )
 end 
-timer.performWithDelay(100, printTimeSinceStart)
+Runtime:addEventListener("enterFrame", printTimeSinceStart)
 ``````

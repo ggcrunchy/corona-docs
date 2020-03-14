@@ -24,7 +24,8 @@ This is also available as ['time'][api.event.enterFrame.time] via enterFrame eve
 ## Example
 
 ``````lua
-if Runtime:hasEventSource( "gyroscope" ) then
-    Runtime:addEventListener( "gyroscope", myListener )
-end
+function printFrameStartTime( )
+	print (Runtime.getFrameStartTime( )/1000 .. " seconds since app started." )
+end 
+timer.performWithDelay(100, printFrameStartTime)
 ``````
