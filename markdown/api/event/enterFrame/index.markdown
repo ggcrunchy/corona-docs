@@ -15,6 +15,8 @@
 
 ## Properties
 
+#### [event.frame][api.event.enterFrame.frame]
+
 #### [event.name][api.event.enterFrame.name]
 
 #### [event.time][api.event.enterFrame.time]

@@ -65,6 +65,8 @@ local imageTexture = graphics.newTexture( { type="image", filename="icon.png", b
 
 * `"canvas"` &mdash; Creates a [TextureResource][api.type.TextureResource] object of type [TextureResourceCanvas][api.type.TextureResourceCanvas]. This texture resource is an <nobr>in-memory</nobr> texture which can be modified by rendering display objects to it.
 
+* `"maskCanvas"` &mdash; Creates a [TextureResource][api.type.TextureResource] object of type [TextureResourceCanvas][api.type.TextureResourceCanvas]. This texture resource is an <nobr>in-memory</nobr> texture which can be modified by rendering display objects to it, but intended for use as a mask: "red" pixel components are interpreted as white, the rest being ignored. The usual masking constraints apply.
+
 <div class="code-indent">
 
 ``````lua
@@ -80,16 +82,16 @@ _[String][api.type.String]._ Only applies when `type` is `"image"`. Indicates th
 _[Constant][api.type.Constant]._ Only applies when `type` is `"image"`. Specifies the base directory where `filename` is located. Options include `system.ResourceDirectory`, `system.DocumentsDirectory`, `system.ApplicationSupportDirectory`, `system.TemporaryDirectory` and `system.CachesDirectory`. Default is `system.ResourceDirectory`.
 
 ##### width ~^(required)^~
-_[Number][api.type.Number]._ Only applies when `type` is `"canvas"`. Specifies the width in which objects can be rendered within a [TextureResourceCanvas][api.type.TextureResourceCanvas].
+_[Number][api.type.Number]._ Only applies when `type` is `"canvas"` or `"maskCanvas"`. Specifies the width in which objects can be rendered within a [TextureResourceCanvas][api.type.TextureResourceCanvas].
 
 ##### height ~^(required)^~
-_[Number][api.type.Number]._ Only applies when `type` is `"canvas"`. Specifies the height in which objects can be rendered within a [TextureResourceCanvas][api.type.TextureResourceCanvas].
+_[Number][api.type.Number]._ Only applies when `type` is `"canvas"` or `"maskCanvas"`. Specifies the height in which objects can be rendered within a [TextureResourceCanvas][api.type.TextureResourceCanvas].
 
 ##### pixelWidth ~^(optional)^~
-_[Number][api.type.Number]._ Only applies when `type` is `"canvas"`. Specifies the horizontal pixel dimensions of the texture that the canvas resource is rendered to.
+_[Number][api.type.Number]._ Only applies when `type` is `"canvas"` or `"maskCanvas"`. Specifies the horizontal pixel dimensions of the texture that the canvas resource is rendered to.
 
 ##### pixelHeight ~^(optional)^~
-_[Number][api.type.Number]._ Only applies when `type` is `"canvas"`. Specifies the vertical pixel dimensions of the texture that the canvas resource is rendered to.
+_[Number][api.type.Number]._ Only applies when `type` is `"canvas"` or `"maskCanvas"`. Specifies the vertical pixel dimensions of the texture that the canvas resource is rendered to.
 
 
 ## Examples
