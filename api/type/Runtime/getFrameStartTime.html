@@ -111,9 +111,10 @@
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<pre class="brush: lua;">if Runtime:hasEventSource( "gyroscope" ) then
-    Runtime:addEventListener( "gyroscope", myListener )
-end</pre>
+<pre class="brush: lua;">function printFrameStartTime( )
+    print (Runtime.getFrameStartTime( )/1000 .. " seconds since app started." )
+end 
+timer.performWithDelay(100, printFrameStartTime)</pre>
 <hr>
 <div id="footer">
 <p class="copyright">

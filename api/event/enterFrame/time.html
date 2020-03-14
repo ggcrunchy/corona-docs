@@ -97,10 +97,10 @@
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<pre class="brush: lua;">function printTimeSinceStart( )
-    print (Runtime.getFrameStartTime()/1000 .. " seconds since app started." )
+<pre class="brush: lua;">function printTimeSinceStart( event )
+    print (event.time/1000 .. " seconds since app started." )
 end 
-timer.performWithDelay(100, printTimeSinceStart)</pre>
+Runtime:addEventListener("enterFrame", printTimeSinceStart)</pre>
 <hr>
 <div id="footer">
 <p class="copyright">

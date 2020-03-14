@@ -56,7 +56,6 @@
 <ul>
 <li><a href="#runtime.getframeid">Runtime.getFrameID()</a><ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#syntax">Syntax</a></li>
 <li><a href="#example">Example</a></li>
 </ul></li>
 </ul>
@@ -103,22 +102,21 @@
 <div id="overview" class="section level2">
 <h2>Overview</h2>
 <p>Returns a value that identifies the current frame, say for debugging or to handle at-most-once-per-frame actions.</p>
-<p>As an example of the latter, pathfinding might be too expensive to perform twice, or once and then not even use, so we can trigger it on demand and then reuse the result throughout the current frame. To do this, we only need to watch a single variable.</p>
-<p>ALSO enterFrame event as 'frame', but as free function can be used from timers or proxied transitions, too, without potential ordering concerns</p>
-<p>BLAH BLAH</p>
-<p>Determines if the device is capable of providing events for a given event source such as <code>&quot;accelerometer&quot;</code> or <code>&quot;gyroscope&quot;</code>.</p>
-<p>This function returns <code>true</code> if the event source exists, meaning it is okay to call <a href="../../../api/type/EventDispatcher/addEventListener.html">EventDispatcher:addEventListener()</a> to handle its events.</p>
-<p>It returns <code>false</code> if the event source does not exist. For example, if this returns false for <code>&quot;gyroscope&quot;</code> then this would indicate that the appropriate hardware was not found on the device.</p>
-</div>
-<div id="syntax" class="section level2">
-<h2>Syntax</h2>
-<pre class="brush: lua;">Runtime.getFrameID( )</pre>
+<p>This is also available as <a href="../../../api/event/enterFrame/frame.html">'frame'</a> via enterFrame event listener functions.</p>
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<pre class="brush: lua;">if Runtime:hasEventSource( "gyroscope" ) then
-    Runtime:addEventListener( "gyroscope", myListener )
-end</pre>
+<pre class="brush: lua;">local frameID
+function updatePathfinding( ) -- might get called before any of our enterFrame event listener functions
+    local id = Runtime.getFrameID()
+
+    if id ~= frameID then -- frame is new?
+        frameID = id
+        doExpensivePathfinding() -- this might be too expensive to perform twice, or once and then not even use, so we only trigger it on demand
+                                 -- and then reuse the result for the rest of the frame
+    end
+end 
+timer.performWithDelay(100, updatePathfinding)</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
