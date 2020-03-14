@@ -197,10 +197,26 @@ Notes
 <p>If you use these variables in your kernel's shader code, your kernel is implicitly <nobr>time-dependent</nobr>. In other words, your kernel will output different results and evolve as time progresses.</p>
 <p>When using these variables, you need to tell Corona that your shader requires the GPU to <nobr>re-render</nobr> the scene, even if there are no other changes to the display objects in the scene. You can do this by setting the <code>kernel.isTimeDependent</code> property in your kernel definition as indicated below. Note that you should only set this if your shader code is truly <nobr>time-dependent</nobr>, since it effectively forces the GPU to <nobr>re-render</nobr> every frame.</p>
 <pre class="brush: lua;">kernel.isTimeDependent = true</pre>
-<p>If <code>isTimeDependent</code> is defined, Corona will also look for <code>timeTransform</code>. If it exists, this must be a table and should have one of the following as its <code>func</code> member: &quot;modulo&quot;, &quot;pingpong&quot;, &quot;sine&quot;. The value of <code>CoronaTotalTime</code> within the shader will be the result of any such transformation.</p>
+<p>If <code>isTimeDependent</code> is defined, Corona will also look for <code>timeTransform</code>. If this exists, it must be a table and should have one of the following as its <code>func</code> member: &quot;modulo&quot;, &quot;pingpong&quot;, &quot;sine&quot;. The value of <code>CoronaTotalTime</code> within the shader will be the result of any such transformation.</p>
 <p>The &quot;modulo&quot; transform is computed as <code>CoronaTotalTime = CoronaTotalTime % range</code>, where range is a positive number that may be supplied in the <code>timeTransform</code> table under that same key. By default, <code>range</code> is 1.</p>
-<p>The &quot;pingpong&quot; transform is similar, except <code>CoronaTotalTime</code> will first go from 0 to <code>range</code>, then fall back to 0, then repeat.</p>
+<p>The &quot;pingpong&quot; transform is similar, except <code>CoronaTotalTime</code> will first go from 0 to <code>range</code> (no default, in this case), then fall back to 0, then repeat.</p>
 <p>The &quot;sine&quot; transform is computed as <code>CoronaTotalTime = amplitude * sin(scale * CoronaTotalTime + phase)</code>. Again, <code>amplitude</code> and <code>phase</code> may be provided in the <code>timeTransform</code> table, with defaults 1 and 0 respectively. The scale is calculated from a <code>period</code> parameter, a positive number indicating how much time should pass before the sine waves repeats. The default is 2 * π, which has a scale factor of 1.</p>
+<pre class="brush: lua;">graphics.defineEffect{
+    category = "generator", group = "time_tests", name = "pingpong",
+
+    isTimeDependent = true, timeTransform = { func = "pingpong", range = 5 },
+
+    fragment = [[
+        P_COLOR vec4 FragmentKernel (P_UV vec2 _)
+        {
+            return vec4(0., CoronaTotalTime / 5., 0., 1.);
+        }
+    ]]
+}
+
+local rect = display.newRect(300, 100, 50, 50)
+
+rect.fill.effect = "generator.time_tests.pingpong"</pre>
 <p>See <a href="#precisionissues">precision issues</a> for the motivation behind the transform.</p>
 <p><a id="vertexsize"></a></p>
 </div>
@@ -596,6 +612,7 @@ v2.xz = v0 * v1; // GOOD: Write mask limits calculations</pre>
 <p>For instance, see the <a href="https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf">&quot;Qualifiers&quot;</a> section in this OpenGL ES 2.0 reference card. With <strong>mediump</strong> our <em>D</em> is only guaranteed to be an underwhelming 1024.</p>
 <p>Now imagine what this means for time, measured in seconds. At first, we'll be just fine. But just after the two-minute mark, interpolating between 128 and 256, we only go in steps of (256 - 128) / 1024, or 1/8 second accuracy. At five minutes we'll proceed in increments of 1/4, and so on. Anything relying on such results becomes quite choppy.</p>
 <p>This gloomy scenario only captures part of what's going on, of course. The time is actually maintained in Lua as a single-precision float, with a respectable 23-bit numerator. Furthermore, many shaders can get by with rather small values derived from the time, for example one built on a trigonometric function that only needs some low multiple of π. In these cases the shader can take a transformed result, such as <code>TrueTotalTime % X</code> or <code>sin(N * TrueTotalTime)</code>.</p>
+<p>Further details may be found on the <a href="../../guide/data/numbersInLua/index.html">Numbers in Lua</a> guide.</p>
 <hr>
 <div id="footer">
 <p class="copyright">
