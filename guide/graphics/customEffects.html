@@ -96,6 +96,7 @@
 <li><a href="#avoid-dynamic-texture-lookups">Avoid Dynamic Texture Lookups</a></li>
 <li><a href="#avoid-branching-and-loops">Avoid Branching and Loops</a></li>
 </ul></li>
+<li><a href="#precision-issues">Precision Issues</a></li>
 </ul></li>
 </ul>
 </div>
@@ -115,6 +116,7 @@
 <li><a href="#varyingvariables">Custom Varying Variables</a></li>
 <li><a href="#effectparameters">Effect Parameters</a></li>
 <li><a href="#bestpractices">GLSL Conventions and Best Practices</a></li>
+<li><a href="#precisionissues">Precision Issues</a></li>
 </ul>
 </div>
 <div class="guide-notebox-imp">
@@ -195,6 +197,11 @@ Notes
 <p>If you use these variables in your kernel's shader code, your kernel is implicitly <nobr>time-dependent</nobr>. In other words, your kernel will output different results and evolve as time progresses.</p>
 <p>When using these variables, you need to tell Corona that your shader requires the GPU to <nobr>re-render</nobr> the scene, even if there are no other changes to the display objects in the scene. You can do this by setting the <code>kernel.isTimeDependent</code> property in your kernel definition as indicated below. Note that you should only set this if your shader code is truly <nobr>time-dependent</nobr>, since it effectively forces the GPU to <nobr>re-render</nobr> every frame.</p>
 <pre class="brush: lua;">kernel.isTimeDependent = true</pre>
+<p>If <code>isTimeDependent</code> is defined, Corona will also look for <code>timeTransform</code>. If it exists, this must be a table and should have one of the following as its <code>func</code> member: &quot;modulo&quot;, &quot;pingpong&quot;, &quot;sine&quot;. The value of <code>CoronaTotalTime</code> within the shader will be the result of any such transformation.</p>
+<p>The &quot;modulo&quot; transform is computed as <code>CoronaTotalTime = CoronaTotalTime % range</code>, where range is a positive number that may be supplied in the <code>timeTransform</code> table under that same key. By default, <code>range</code> is 1.</p>
+<p>The &quot;pingpong&quot; transform is similar, except <code>CoronaTotalTime</code> will first go from 0 to <code>range</code>, then fall back to 0, then repeat.</p>
+<p>The &quot;sine&quot; transform is computed as <code>CoronaTotalTime = amplitude * sin(scale * CoronaTotalTime + phase)</code>. Again, <code>amplitude</code> and <code>phase</code> may be provided in the <code>timeTransform</code> table, with defaults 1 and 0 respectively. The scale is calculated from a <code>period</code> parameter, a positive number indicating how much time should pass before the sine waves repeats. The default is 2 * π, which has a scale factor of 1.</p>
+<p>See <a href="#precisionissues">precision issues</a> for the motivation behind the transform.</p>
 <p><a id="vertexsize"></a></p>
 </div>
 <div id="size" class="section level3">
@@ -282,6 +289,7 @@ P_POSITION vec2 VertexKernel( P_POSITION vec2 position )
 <li><code>P_COLOR sampler2D CoronaSampler1</code> — The texture sampler for the second texture (requires a <a href="../../api/type/CompositePaint/index.html">composite paint</a>).</li>
 </ul>
 <p>When available (<a href="../../api/library/system/getInfo.html">system.getInfo( &quot;maxVertexTextureUnits&quot; )</a> returns 1 or 2), samplers may also be used in the vertex kernel. At the moment your kernel must explicitly declare these as <code>u_FillSampler0</code> and <code>u_FillSampler1</code> and use those names for them.</p>
+<p><strong>TODO</strong> This last bit might call for an example. It's similar to the yet-undocumented userdata mentioned below.</p>
 </div>
 <div id="alphatint" class="section level3">
 <h3>Alpha/Tint</h3>
@@ -575,6 +583,19 @@ v2.xz = v0 * v1; // GOOD: Write mask limits calculations</pre>
 <div id="avoid-branching-and-loops" class="section level3">
 <h3>Avoid Branching and Loops</h3>
 <p>Branching instructions (<code>if</code> conditions) are expensive. When possible, <code>for</code> loops should be unrolled or replaced by vector operations.</p>
+<p><a id="precisionissues"></a></p>
+</div>
+</div>
+<div id="precision-issues" class="section level2">
+<h2>Precision Issues</h2>
+<p>Corona's shaders use <a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754 floats</a> as the underlying representation for their numeric values.</p>
+<p>For the majority of cases (the exceptions are irrelevant here), part of the number constitutes an integer numerator. Let's call this <em>N</em>. Our numerator can go from 0 to <em>D</em> - 1, <em>D</em> being a constant power of 2. Together these give us a scale factor <em>t</em> = <em>N</em> / <em>D</em> in the range [0, 1).</p>
+<p>The rest of the number is devoted to the sign (positive or negative) and the exponent, the latter being an integer that gives us a power of 2, for instance 2<sup>5</sup>. We obtain values by interpolating between neighboring powers, using the scale factor: result = 2<sup>p</sup> * (1 + <em>t</em>) Notice that if <em>t</em> were 1 we would land on the next power of 2.</p>
+<p>This can exactly represent some values, but will only approximate most. Any format is going to have such idiosyncracies. IEEE-754 happens to provide a lot of accuracy near 0 while also giving us exact integers all the way up to 2 * <em>D</em>.</p>
+<p>Lua offers us 64-bit floats, with rather generous 52-bit numerators and accompanying accuracy. On GPUs we are rarely so lucky, especially with mobile hardware, owing to concerns like bandwidth and memory.</p>
+<p>For instance, see the <a href="https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf">&quot;Qualifiers&quot;</a> section in this OpenGL ES 2.0 reference card. With <strong>mediump</strong> our <em>D</em> is only guaranteed to be an underwhelming 1024.</p>
+<p>Now imagine what this means for time, measured in seconds. At first, we'll be just fine. But just after the two-minute mark, interpolating between 128 and 256, we only go in steps of (256 - 128) / 1024, or 1/8 second accuracy. At five minutes we'll proceed in increments of 1/4, and so on. Anything relying on such results becomes quite choppy.</p>
+<p>This gloomy scenario only captures part of what's going on, of course. The time is actually maintained in Lua as a single-precision float, with a respectable 23-bit numerator. Furthermore, many shaders can get by with rather small values derived from the time, for example one built on a trigonometric function that only needs some low multiple of π. In these cases the shader can take a transformed result, such as <code>TrueTotalTime % X</code> or <code>sin(N * TrueTotalTime)</code>.</p>
 <hr>
 <div id="footer">
 <p class="copyright">
@@ -584,7 +605,6 @@ v2.xz = v0 * v1; // GOOD: Write mask limits calculations</pre>
 Help us help you! If you notice a problem with this page, please report it.
 </p>
 <p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=guide.graphics.customEffects&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
-</div>
 </div>
 </div>
 </div>
