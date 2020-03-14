@@ -92,7 +92,8 @@
 <div id="overview" class="section level2">
 <h2>Overview</h2>
 <p>Numbers in Corona are 64-bit values, interpreted by Lua 5.1 as double-precision IEEE-754 &quot;float&quot;s. This gives our numbers some flexibility, but comes with a few quirks.</p>
-<p>NOTE +43.75 = 0x4045 e000 0000 0000 = 0 10000000100 010111100000000000000000‬00000000000000000000000000000000 NOTE -43.75 = 0xc045 e000 0000 0000 = 1 10000000100 010111100000000000000000‬00000000000000000000000000000000</p>
+<p><strong>TODO</strong> +43.75 = 0x4045 e000 0000 0000 = 0 10000000100 010111100000000000000000‬00000000000000000000000000000000</p>
+<p><strong>TODO</strong> -43.75 = 0xc045 e000 0000 0000 = 1 10000000100 010111100000000000000000‬00000000000000000000000000000000</p>
 <p><a id="the-exponent-bits"></a></p>
 </div>
 <div id="the-exponent-bits" class="section level2">
@@ -108,8 +109,8 @@
 <p>The remaining 52 bits have bit pattern 0101111 followed by 45 zeroes, or 1,653,665,488,175,104. Dividing this value by 2<sup>52</sup> gives us our relative position: 0.3671875 of the way along the [32, 64) interval, exactly what we obtain from (43.75 - 32) / (64 - 32).</p>
 <p>If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2<sup>5</sup> / 2<sup>52</sup> = 2<sup>-47</sup>. This is the &quot;unit of least precision&quot; / &quot;unit in the last place&quot;, or ulp, for this range. Furthermore, turning this idea around tells us we land exactly on an integer every 2<sup>47</sup> steps, starting from 0: 32, 33, 34...</p>
 <p>Doing the same thing with [64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the &quot;floating point&quot; terminology originates here. IS this last comment playing too loose?</p>
-<p>The situation with integers prevails all the way to [2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, EVERY value in that range is an integer. In [2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.</p>
-<p>Most of the foregoing applies to negative exponents as well. In the range [2<sup>-3</sup>, 2<sup>-2</sup>), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is HUGE! We will never land on an integer in this region, of course.</p>
+<p>The situation with integers prevails all the way to [2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, <strong>every</strong> value in that range is an integer. In [2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.</p>
+<p>Most of the foregoing applies to negative exponents as well. In the range [2<sup>-3</sup>, 2<sup>-2</sup>), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is <strong>huge</strong>! We will never land on an integer in this region, of course.</p>
 <p><a id="special-cases"></a></p>
 </div>
 <div id="special-cases" class="section level2">
@@ -134,28 +135,29 @@
 </div>
 <div id="exact-results" class="section level2">
 <h2>Exact Results</h2>
-<p>There are MANY values this scheme is able to represent exactly; with the above details in mind, we can even come up with some ourselves.</p>
+<p>There are <strong>many</strong> values this scheme is able to represent exactly; with the above details in mind, we can even come up with some ourselves.</p>
 <p>However, many if not most numbers we type into our editors will be &quot;careless&quot; and inexact. In this case, en route from text to running program, the number will be rounded toward a truly representable value.</p>
-<p>ALSO happens when result of an add, multiply, etc. isn't representable</p>
+<p><strong>TODO</strong> happens when result of an add, multiply, etc. isn't representable</p>
+<p><strong>TODO</strong> maybe we should walk through an example or two?</p>
 <p><a id="other-precisions"></a></p>
 </div>
 <div id="other-precisions" class="section level2">
 <h2>Other Precisions</h2>
 <div id="single-precision" class="section level3">
 <h3>Single Precision</h3>
-<p>We have been speaking of &quot;double&quot; precision floats. As the name suggests, there is also a single-precision variety. This is a 32-bit value, with 8 bits of exponent—biased by 127 CHECK THIS!—and 23 devoted to the fraction, with the sign bit as before. These tend to be preferred when memory matters more, such as keeping structures light for cache coherency or when bandwidth is a concern; the obvious downsides are reduced accuracy and numeric range.</p>
+<p>We have been speaking of &quot;double&quot; precision floats. As the name suggests, there is also a single-precision variety. This is a 32-bit value, with 8 bits of exponent—biased by 127 <strong>CHECK THIS!</strong>—and 23 devoted to the fraction, with the sign bit as before. These tend to be preferred when memory matters more, such as keeping structures light for cache coherency or when bandwidth is a concern; the obvious downsides are reduced accuracy and numeric range.</p>
 </div>
 <div id="mobile-shaders" class="section level3">
 <h3>Mobile Shaders</h3>
 <p>NOTE the following is still rough, maybe needs some expansion to emphasize where we see issues in practice, e.g. shimmering on certain corners, especially with larger textures</p>
 <p>We see doubles in Lua, and often both varieties in native code. Floating point also shows up in Corona's shaders. &quot;High precision fragment shader&quot; support, for instance, comes into play on mobile platforms, and basically boils down to how many bits the driver grants to our numbers in fragment kernels.</p>
-<p>According to the OpenGL ES2 specification, &quot;medium&quot; precision—which is available in both vertex and fragment kernels—must offer at least 10 bits of fraction: 1024-wide ranges. Furthermore, it promises the swath of values from 2<sup>-14</sup> to 2<sup>14</sup>, suggesting 5 bits of exponent with allowances for the aforementioned special cases. Internally, these will probably be 16-bit values.</p>
+<p>According to the OpenGL ES2 specification (see for instance, page 3 <a href="https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf">here</a>), &quot;medium&quot; precision—which is available in both vertex and fragment kernels—must offer at least 10 bits of fraction: 1024-wide ranges. Furthermore, it promises the swath of values from 2<sup>-14</sup> to 2<sup>14</sup>, suggesting 5 bits of exponent with allowances for the aforementioned special cases. Internally, these will probably be 16-bit values.</p>
 <p>With &quot;high&quot; precision—only guaranteed in the vertex kernel—we have at least 16 bits fraction: a more generous 65536 slots, plus values from 2<sup>-62</sup> to 2<sup>62</sup>, for 7 bits of exponent.</p>
 <p>These sizes are much tighter than their Lua equivalents, especially in medium precision! They arise from various efficiency concerns on mobile. It's quite easy to wander into the ranges where we can only take steps of say 1 / 8 or 1 / 4, which can manifest in choppy visuals. Mitigating these effects is a key challenge in authoring shaders.</p>
 <p>Even when we're &quot;not using shaders&quot;, Corona itself is, in the form of a texture lookup followed by a pixel plot. The lookup coordinates are implemented as floats on the shader side, and occasionally we will see rather mysterious behaviors arise as a result. Larger textures might exhibit shimmering, for instance, on certain edges or corners, as the numbers grow close to 1 and get rounded; thus the call for wider sprite sheet padding on large textures.</p>
-<p>LOWP seem to be 10-bit denormals? not sure if worth including</p>
+<p><strong>TODO</strong> lowp seem to be 10-bit denormals? not sure if worth including</p>
 <p>Although the specification's guarantees leave room for the special cases, mobile hardware will often go the &quot;fast math&quot; route, only supporting 0 and leaving out denormals, infinity, and NaN.</p>
-<p>ANY conclusion?</p>
+<p><strong>TODO</strong> conclusion?</p>
 <p><a id="links"></a></p>
 </div>
 <div id="links" class="section level3">
