@@ -87,7 +87,7 @@ However, many if not most numbers we type into our editors will be "careless" an
 
 ALSO happens when result of an add, multiply, etc. isn't representable
 
-<a id="other-precisions></a>
+<a id="other-precisions"></a>
 
 ## Other Precisions
 
