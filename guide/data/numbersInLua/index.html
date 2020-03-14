@@ -76,7 +76,7 @@
 </div>
 <div id="numbers-in-lua" class="section level1">
 <h1>Numbers in Lua</h1>
-<p>This guide discusses how numbers are treated in Lua, and Corona in particular.</p>
+<p>This guide discusses how numbers are treated in Lua, and Corona in particular. <strong>THIS IS A WORK IN PROGRESS</strong></p>
 <div class="guides-toc">
 <ul>
 <li><a href="#overview">Overview</a></li>
@@ -102,13 +102,14 @@
 <p>The numbers 43.75 and -43.75 have hexadecimal forms 0x4045e00000000000 and 0xc045e00000000000, apparently quite similar. In fact, the only difference is that the negative number has its highest bit set. And indeed, this &quot;sign bit&quot; is set aside for exactly this purpose.</p>
 <p>What follows will focus on positive numbers, but the analysis is largely the same for negatives.</p>
 <p>Our next 11 bits have pattern 10000000100, or 1028 in decimal. This doesn't seem very helpful, but if we subtract 1023 from it we recover the exponent 5, giving us our interval [2<sup>5</sup>, 2<sup>6</sup>). Exponents are biased in this way to give us the powers of 2 less than 1—1/2, 1/4, and so on—letting us represent ranges from [2<sup>-1022</sup>, 2<sup>-1021</sup>) at the low end all the way up to [2<sup>1023</sup>, 2<sup>1024</sup>).</p>
+<p><strong>TODO</strong> try to convey the scope of these numbers?</p>
 <p><a id="the-fraction-bits"></a></p>
 </div>
 <div id="the-fraction-bits" class="section level2">
 <h2>The Fraction Bits</h2>
 <p>The remaining 52 bits have bit pattern 0101111 followed by 45 zeroes, or 1,653,665,488,175,104. Dividing this value by 2<sup>52</sup> gives us our relative position: 0.3671875 of the way along the [32, 64) interval, exactly what we obtain from (43.75 - 32) / (64 - 32).</p>
 <p>If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2<sup>5</sup> / 2<sup>52</sup> = 2<sup>-47</sup>. This is the &quot;unit of least precision&quot; / &quot;unit in the last place&quot;, or ulp, for this range. Furthermore, turning this idea around tells us we land exactly on an integer every 2<sup>47</sup> steps, starting from 0: 32, 33, 34...</p>
-<p>Doing the same thing with [64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the &quot;floating point&quot; terminology originates here. IS this last comment playing too loose?</p>
+<p>Doing the same thing with [64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the &quot;floating point&quot; terminology originates here. <strong>TODO</strong> last comment playing too loose?</p>
 <p>The situation with integers prevails all the way to [2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, <strong>every</strong> value in that range is an integer. In [2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.</p>
 <p>Most of the foregoing applies to negative exponents as well. In the range [2<sup>-3</sup>, 2<sup>-2</sup>), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is <strong>huge</strong>! We will never land on an integer in this region, of course.</p>
 <p><a id="special-cases"></a></p>
@@ -128,7 +129,7 @@
 <p>For starters, with a fraction of 0 we get infinity. If we divide a vanilla number by infinity, we get 0 back; any other arithmetic results in infinity again. <double check a couple cases here> We can introduce this value ourselves by dividing by 0, for instance <code>1 / 0</code> or <code>-1 / 0</code>.</p>
 <p>A non-0 fraction will give us &quot;Not a Number&quot;, often abbreviated as NaN or nan. These arise from bogus computations like <code>0 / 0</code> (handy for adding NaNs in code) or where garden-variety numbers are inadequate, such as <code>math.sqrt(-1)</code>. Like infinity, NaN is contagious: any arithmetic with one results in another NaN.</p>
 <p>A NaN has the interesting property of not being equal to itself. Code such as <code>x ~= x</code> is used to detect them.</p>
-<p>Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often we only care if a value is one or not. It is in fact quite common to hijack these 52 bits and store some data there when the value isn't being used as a number. LINK?</p>
+<p>Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often we only care if a value is one or not. It is in fact quite common to hijack these 52 bits and store some data there when the value isn't being used as a number. <strong>TODO</strong> example?</p>
 <p>Now, while 0 is obviously important, the rest often complicate things. For correctness, mathematical libraries must go through all sorts of hoops to account for the various corner cases. This can slow down code appreciably, enough that many compilers offer &quot;fast math&quot; switches to disable the logic altogether.</p>
 <p><a id="exact-results"></a></p>
 </div>

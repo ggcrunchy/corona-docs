@@ -281,6 +281,7 @@ P_POSITION vec2 VertexKernel( P_POSITION vec2 position )
 <li><code>P_COLOR sampler2D CoronaSampler0</code> — The texture sampler for the first texture.</li>
 <li><code>P_COLOR sampler2D CoronaSampler1</code> — The texture sampler for the second texture (requires a <a href="../../api/type/CompositePaint/index.html">composite paint</a>).</li>
 </ul>
+<p>When available (<a href="../../api/library/system/getInfo.html">system.getInfo( &quot;maxVertexTextureUnits&quot; )</a> returns 1 or 2), samplers may also be used in the vertex kernel. At the moment your kernel must explicitly declare these as <code>u_FillSampler0</code> and <code>u_FillSampler1</code> and use those names for them.</p>
 </div>
 <div id="alphatint" class="section level3">
 <h3>Alpha/Tint</h3>

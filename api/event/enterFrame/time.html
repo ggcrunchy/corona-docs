@@ -84,6 +84,10 @@
 <td align="left"><strong>Keywords</strong></td>
 <td align="left">enterframe, time</td>
 </tr>
+<tr class="odd">
+<td align="left"><strong>See also</strong></td>
+<td align="left"><a href="../../../api/type/Runtime/getFrameStartTime.html">Runtime.getFrameStartTime()</a></td>
+</tr>
 </tbody>
 </table>
 </blockquote>
@@ -93,10 +97,10 @@
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<pre class="brush: lua;">function printTimeSinceStart( event )
-    print (event.time/1000 .. " seconds since app started." )
+<pre class="brush: lua;">function printTimeSinceStart( )
+    print (Runtime.getFrameStartTime()/1000 .. " seconds since app started." )
 end 
-Runtime:addEventListener("enterFrame", printTimeSinceStart)</pre>
+timer.performWithDelay(100, printTimeSinceStart)</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
