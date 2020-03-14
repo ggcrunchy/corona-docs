@@ -20,8 +20,9 @@ This guide discusses how numbers are treated in Lua, and Corona in particular.
 
 Numbers in Corona are 64-bit values, interpreted by Lua 5.1 as double-precision IEEE-754 "float"s. This gives our numbers some flexibility, but comes with a few quirks.
 
-NOTE +43.75 = 0x4045 e000 0000 0000 = 0 10000000100 010111100000000000000000‬00000000000000000000000000000000
-NOTE -43.75 = 0xc045 e000 0000 0000 = 1 10000000100 010111100000000000000000‬00000000000000000000000000000000
+**TODO** +43.75 = 0x4045 e000 0000 0000 = 0 10000000100 010111100000000000000000‬00000000000000000000000000000000
+
+**TODO** -43.75 = 0xc045 e000 0000 0000 = 1 10000000100 010111100000000000000000‬00000000000000000000000000000000
 
 <a id="the-exponent-bits"></a>
 
@@ -45,9 +46,9 @@ If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2
 
 Doing the same thing with \[64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. IS this last comment playing too loose?
 
-The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, EVERY value in that range is an integer. In \[2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.
+The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, **every** value in that range is an integer. In \[2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.
 
-Most of the foregoing applies to negative exponents as well. In the range \[2<sup>-3</sup>, 2<sup>-2</sup>), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is HUGE! We will never land on an integer in this region, of course.
+Most of the foregoing applies to negative exponents as well. In the range \[2<sup>-3</sup>, 2<sup>-2</sup>), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is **huge**! We will never land on an integer in this region, of course.
 
 <a id="special-cases"></a>
 
@@ -81,11 +82,13 @@ Now, while 0 is obviously important, the rest often complicate things. For corre
 
 ## Exact Results
 
-There are MANY values this scheme is able to represent exactly; with the above details in mind, we can even come up with some ourselves.
+There are **many** values this scheme is able to represent exactly; with the above details in mind, we can even come up with some ourselves.
 
 However, many if not most numbers we type into our editors will be "careless" and inexact. In this case, en route from text to running program, the number will be rounded toward a truly representable value.
 
-ALSO happens when result of an add, multiply, etc. isn't representable
+**TODO** happens when result of an add, multiply, etc. isn't representable
+
+**TODO** maybe we should walk through an example or two?
 
 <a id="other-precisions"></a>
 
@@ -93,7 +96,7 @@ ALSO happens when result of an add, multiply, etc. isn't representable
 
 ### Single Precision
 
-We have been speaking of "double" precision floats. As the name suggests, there is also a single-precision variety. This is a 32-bit value, with 8 bits of exponent&mdash;biased by 127 CHECK THIS!&mdash;and 23 devoted to the fraction, with the sign bit as before. These tend to be preferred when memory matters more, such as keeping structures light for cache coherency or when bandwidth is a concern; the obvious downsides are reduced accuracy and numeric range.
+We have been speaking of "double" precision floats. As the name suggests, there is also a single-precision variety. This is a 32-bit value, with 8 bits of exponent&mdash;biased by 127 **CHECK THIS!**&mdash;and 23 devoted to the fraction, with the sign bit as before. These tend to be preferred when memory matters more, such as keeping structures light for cache coherency or when bandwidth is a concern; the obvious downsides are reduced accuracy and numeric range.
 
 ### Mobile Shaders
 
@@ -101,7 +104,7 @@ NOTE the following is still rough, maybe needs some expansion to emphasize where
 
 We see doubles in Lua, and often both varieties in native code. Floating point also shows up in Corona's shaders. "High precision fragment shader" support, for instance, comes into play on mobile platforms, and basically boils down to how many bits the driver grants to our numbers in fragment kernels.
 
-According to the OpenGL ES2 specification, "medium" precision&mdash;which is available in both vertex and fragment kernels&mdash;must offer at least 10 bits of fraction: 1024-wide ranges. Furthermore, it promises the swath of values from 2<sup>-14</sup> to 2<sup>14</sup>, suggesting 5 bits of exponent with allowances for the aforementioned special cases. Internally, these will probably be 16-bit values.
+According to the OpenGL ES2 specification (see for instance, page 3 [here](https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf)), "medium" precision&mdash;which is available in both vertex and fragment kernels&mdash;must offer at least 10 bits of fraction: 1024-wide ranges. Furthermore, it promises the swath of values from 2<sup>-14</sup> to 2<sup>14</sup>, suggesting 5 bits of exponent with allowances for the aforementioned special cases. Internally, these will probably be 16-bit values.
 
 With "high" precision&mdash;only guaranteed in the vertex kernel&mdash;we have at least 16 bits fraction: a more generous 65536 slots, plus values from 2<sup>-62</sup> to 2<sup>62</sup>, for 7 bits of exponent.
 
@@ -109,11 +112,11 @@ These sizes are much tighter than their Lua equivalents, especially in medium pr
 
 Even when we're "not using shaders", Corona itself is, in the form of a texture lookup followed by a pixel plot. The lookup coordinates are implemented as floats on the shader side, and occasionally we will see rather mysterious behaviors arise as a result. Larger textures might exhibit shimmering, for instance, on certain edges or corners, as the numbers grow close to 1 and get rounded; thus the call for wider sprite sheet padding on large textures.
 
-LOWP seem to be 10-bit denormals? not sure if worth including
+**TODO** lowp seem to be 10-bit denormals? not sure if worth including
 
 Although the specification's guarantees leave room for the special cases, mobile hardware will often go the "fast math" route, only supporting 0 and leaving out denormals, infinity, and NaN.
 
-ANY conclusion?
+**TODO** conclusion?
 
 <a id="links"></a>
 
