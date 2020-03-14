@@ -6,19 +6,27 @@
 > __Event__             [enterFrame][api.event.enterFrame]
 > __Revision__          [REVISION_LABEL](REVISION_URL)
 > __Keywords__          enterframe, frame
+> __See also__          [Runtime.getFrameID()][api.type.Runtime.getFrameID], [frame][api.event.enterFrame.frame]
 > --------------------- ------------------------------------------------------------------------------------------
 
 ## Overview
 
-TODO TODO TODO
+Returns a value that identifies the current frame, say for debugging or to handle at-most-once-per-frame actions.
 
-The time in milliseconds since the start of the application accessible by an enterFrame event listener function (which is called on every frame, until the event listener is removed).
+This is also available as ['frame'][api.event.enterFrame.frame] via enterFrame event listener functions.
 
 ## Example
  
 ``````lua
-function printTimeSinceStart( event )
-    print (event.time/1000 .. " seconds since app started." )
+local frameID
+function updatePathfinding( ) -- might get called before any of our enterFrame event listener functions
+    local id = Runtime.getFrameID()
+
+    if id ~= frameID then -- frame is new?
+        frameID = id
+		doExpensivePathfinding() -- this might be too expensive to perform twice, or once and then not even use, so we only trigger it on demand
+		                         -- and then reuse the result for the rest of the frame
+	end
 end 
-Runtime:addEventListener("enterFrame", printTimeSinceStart)
+timer.performWithDelay(100, updatePathfinding)
 ``````

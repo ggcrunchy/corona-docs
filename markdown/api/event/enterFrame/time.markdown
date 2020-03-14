@@ -6,6 +6,7 @@
 > __Event__             [enterFrame][api.event.enterFrame]
 > __Revision__          [REVISION_LABEL](REVISION_URL)
 > __Keywords__          enterframe, time
+> __See also__          [Runtime.getFrameStartTime()][api.type.Runtime.getFrameStartTime]
 > --------------------- ------------------------------------------------------------------------------------------
 
 ## Overview
@@ -15,8 +16,8 @@ The time in milliseconds since the start of the application accessible by an ent
 ## Example
  
 ``````lua
-function printTimeSinceStart( event )
-    print (event.time/1000 .. " seconds since app started." )
+function printTimeSinceStart( )
+    print (Runtime.getFrameStartTime()/1000 .. " seconds since app started." )
 end 
-Runtime:addEventListener("enterFrame", printTimeSinceStart)
+timer.performWithDelay(100, printTimeSinceStart)
 ``````

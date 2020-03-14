@@ -1,6 +1,6 @@
 # Numbers in Lua
 
-This guide discusses how numbers are treated in Lua, and Corona in particular.
+This guide discusses how numbers are treated in Lua, and Corona in particular. **THIS IS A WORK IN PROGRESS**
 
 <div class="guides-toc">
 
@@ -36,6 +36,8 @@ What follows will focus on positive numbers, but the analysis is largely the sam
 
 Our next 11 bits have pattern 10000000100, or 1028 in decimal. This doesn't seem very helpful, but if we subtract 1023 from it we recover the exponent 5, giving us our interval \[2<sup>5</sup>, 2<sup>6</sup>). Exponents are biased in this way to give us the powers of 2 less than 1&mdash;1/2, 1/4, and so on&mdash;letting us represent ranges from \[2<sup>-1022</sup>, 2<sup>-1021</sup>) at the low end all the way up to \[2<sup>1023</sup>, 2<sup>1024</sup>).
 
+**TODO** try to convey the scope of these numbers?
+
 <a id="the-fraction-bits"></a>
 
 ## The Fraction Bits
@@ -44,7 +46,7 @@ The remaining 52 bits have bit pattern 0101111 followed by 45 zeroes, or 1,653,6
 
 If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2<sup>5</sup> / 2<sup>52</sup> = 2<sup>-47</sup>. This is the "unit of least precision" / "unit in the last place", or ulp, for this range. Furthermore, turning this idea around tells us we land exactly on an integer every 2<sup>47</sup> steps, starting from 0: 32, 33, 34...
 
-Doing the same thing with \[64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. IS this last comment playing too loose?
+Doing the same thing with \[64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. **TODO** last comment playing too loose?
 
 The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, **every** value in that range is an integer. In \[2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.
 
@@ -74,7 +76,7 @@ A non-0 fraction will give us "Not a Number", often abbreviated as NaN or nan. T
 
 A NaN has the interesting property of not being equal to itself. Code such as `x ~= x` is used to detect them.
 
-Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often we only care if a value is one or not. It is in fact quite common to hijack these 52 bits and store some data there when the value isn't being used as a number. LINK?
+Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often we only care if a value is one or not. It is in fact quite common to hijack these 52 bits and store some data there when the value isn't being used as a number. **TODO** example?
 
 Now, while 0 is obviously important, the rest often complicate things. For correctness, mathematical libraries must go through all sorts of hoops to account for the various corner cases. This can slow down code appreciably, enough that many compilers offer "fast math" switches to disable the logic altogether.
 

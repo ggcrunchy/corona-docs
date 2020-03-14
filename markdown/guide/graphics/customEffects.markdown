@@ -207,6 +207,8 @@ The same vertex kernel [size](#vertexsize) uniforms can be accessed by the fragm
 * `P_COLOR sampler2D CoronaSampler0` &mdash; The texture sampler for the first texture.
 * `P_COLOR sampler2D CoronaSampler1` &mdash; The texture sampler for the second texture (requires a [composite paint][api.type.CompositePaint]).
 
+When available ([system.getInfo( "maxVertexTextureUnits" )][api.library.system.getInfo] returns 1 or 2), samplers may also be used in the vertex kernel. At the moment your kernel must explicitly declare these as `u_FillSampler0` and `u_FillSampler1` and use those names for them.
+
 ### Alpha/Tint
 
 All display objects have an [alpha][api.type.DisplayObject.alpha] property. In addition, [shape][api.type.ShapeObject] objects have a tint which is set either via [object:setFillColor()][api.type.ShapeObject.setFillColor] or the color channel properties <nobr>([r][api.type.Paint.r], [g][api.type.Paint.g], [b][api.type.Paint.b], [a][api.type.Paint.a])</nobr> of the object's [fill][api.type.ShapeObject.fill] property.
