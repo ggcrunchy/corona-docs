@@ -129,7 +129,7 @@
 <p>A NaN has the interesting property of not being equal to itself. Code such as <code>x ~= x</code> is used to detect them.</p>
 <p>Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often we only care if a value is one or not. It is in fact quite common to hijack these 52 bits and store some data there when the value isn't being used as a number. LINK?</p>
 <p>Now, while 0 is obviously important, the rest often complicate things. For correctness, mathematical libraries must go through all sorts of hoops to account for the various corner cases. This can slow down code appreciably, enough that many compilers offer &quot;fast math&quot; switches to disable the logic altogether.</p>
-<p><a id="exact-results></a></p>
+<p><a id="exact-results"></a></p>
 </div>
 </div>
 <div id="exact-results" class="section level2">
