@@ -50,7 +50,7 @@ If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2
 
 Doing the same thing with \[64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. **TODO** last comment playing too loose?
 
-The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, **every** value in that range is an integer, with no gars.
+The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, **every** value in that range is an integer, with no gaps.
 
 **TODO** expand one or two of the large powers out for some variety / sense of size?
 
@@ -114,7 +114,7 @@ We have been speaking of "double" precision floats. As the name suggests, there 
 
 ### Mobile Shaders
 
-NOTE the following is still rough, maybe needs some expansion to emphasize where we see issues in practice, e.g. shimmering on certain corners, especially with larger textures
+**TODO** the following is still rough, maybe needs some expansion to emphasize where we see issues in practice, e.g. shimmering on certain corners, especially with larger textures
 
 We see doubles in Lua, and often both varieties in native code. Floating point also shows up in Corona's shaders. "High precision fragment shader" support, for instance, comes into play on mobile platforms, and basically boils down to how many bits the driver grants to our numbers in fragment kernels.
 

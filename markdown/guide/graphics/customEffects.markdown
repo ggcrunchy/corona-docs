@@ -125,13 +125,32 @@ When using these variables, you need to tell Corona that your shader requires th
 kernel.isTimeDependent = true
 `````
 
-If `isTimeDependent` is defined, Corona will also look for `timeTransform`. If it exists, this must be a table and should have one of the following as its `func` member: "modulo", "pingpong", "sine". The value of `CoronaTotalTime` within the shader will be the result of any such transformation.
+If `isTimeDependent` is defined, Corona will also look for `timeTransform`. If this exists, it must be a table and should have one of the following as its `func` member: "modulo", "pingpong", "sine". The value of `CoronaTotalTime` within the shader will be the result of any such transformation.
 
 The "modulo" transform is computed as `CoronaTotalTime = CoronaTotalTime % range`, where range is a positive number that may be supplied in the `timeTransform` table under that same key. By default, `range` is 1.
 
-The "pingpong" transform is similar, except `CoronaTotalTime` will first go from 0 to `range`, then fall back to 0, then repeat.
+The "pingpong" transform is similar, except `CoronaTotalTime` will first go from 0 to `range` (no default, in this case), then fall back to 0, then repeat.
 
 The "sine" transform is computed as `CoronaTotalTime = amplitude * sin(scale * CoronaTotalTime + phase)`. Again, `amplitude` and `phase` may be provided in the `timeTransform` table, with defaults 1 and 0 respectively. The scale is calculated from a `period` parameter, a positive number indicating how much time should pass before the sine waves repeats. The default is 2 * π, which has a scale factor of 1.
+
+`````lua
+graphics.defineEffect{
+    category = "generator", group = "time_tests", name = "pingpong",
+
+    isTimeDependent = true, timeTransform = { func = "pingpong", range = 5 },
+
+    fragment = [[
+        P_COLOR vec4 FragmentKernel (P_UV vec2 _)
+        {
+            return vec4(0., CoronaTotalTime / 5., 0., 1.);
+        }
+    ]]
+}
+
+local rect = display.newRect(300, 100, 50, 50)
+
+rect.fill.effect = "generator.time_tests.pingpong"
+`````
 
 See [precision issues](#precisionissues) for the motivation behind the transform.
 
@@ -594,3 +613,5 @@ For instance, see the ["Qualifiers"](https://www.khronos.org/opengles/sdk/docs/r
 Now imagine what this means for time, measured in seconds. At first, we'll be just fine. But just after the two-minute mark, interpolating between 128 and 256, we only go in steps of (256 - 128) / 1024, or 1/8 second accuracy. At five minutes we'll proceed in increments of 1/4, and so on. Anything relying on such results becomes quite choppy.
 
 This gloomy scenario only captures part of what's going on, of course. The time is actually maintained in Lua as a single-precision float, with a respectable 23-bit numerator. Furthermore, many shaders can get by with rather small values derived from the time, for example one built on a trigonometric function that only needs some low multiple of π. In these cases the shader can take a transformed result, such as `TrueTotalTime % X` or `sin(N * TrueTotalTime)`.
+
+Further details may be found on the [Numbers in Lua][guide.data.numbersInLua] guide.
