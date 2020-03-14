@@ -163,7 +163,8 @@ Important
 <pre class="brush: lua;">local imageTexture = graphics.newTexture( { type="image", filename="icon.png", baseDir=system.ResourceDirectory } )</pre>
 </div>
 <ul>
-<li><code>&quot;canvas&quot;</code> — Creates a <a href="../../../api/type/TextureResource/index.html">TextureResource</a> object of type <a href="../../../api/type/TextureResourceCanvas/index.html">TextureResourceCanvas</a>. This texture resource is an <nobr>in-memory</nobr> texture which can be modified by rendering display objects to it.</li>
+<li><p><code>&quot;canvas&quot;</code> — Creates a <a href="../../../api/type/TextureResource/index.html">TextureResource</a> object of type <a href="../../../api/type/TextureResourceCanvas/index.html">TextureResourceCanvas</a>. This texture resource is an <nobr>in-memory</nobr> texture which can be modified by rendering display objects to it.</p></li>
+<li><p><code>&quot;maskCanvas&quot;</code> — Creates a <a href="../../../api/type/TextureResource/index.html">TextureResource</a> object of type <a href="../../../api/type/TextureResourceCanvas/index.html">TextureResourceCanvas</a>. This texture resource is an <nobr>in-memory</nobr> texture which can be modified by rendering display objects to it, but intended for use as a mask: &quot;red&quot; pixel components are interpreted as white, the rest being ignored. The usual masking constraints apply.</p></li>
 </ul>
 <div class="code-indent">
 <pre class="brush: lua;">local canvasTexture = graphics.newTexture( { type="canvas", width=128, height=128 } )</pre>
@@ -179,19 +180,19 @@ Important
 </div>
 <div id="width-required" class="section level5">
 <h5>width <sub><sup>(required)</sup></sub></h5>
-<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code>. Specifies the width in which objects can be rendered within a <a href="../../../api/type/TextureResourceCanvas/index.html">TextureResourceCanvas</a>.</p>
+<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code> or <code>&quot;maskCanvas&quot;</code>. Specifies the width in which objects can be rendered within a <a href="../../../api/type/TextureResourceCanvas/index.html">TextureResourceCanvas</a>.</p>
 </div>
 <div id="height-required" class="section level5">
 <h5>height <sub><sup>(required)</sup></sub></h5>
-<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code>. Specifies the height in which objects can be rendered within a <a href="../../../api/type/TextureResourceCanvas/index.html">TextureResourceCanvas</a>.</p>
+<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code> or <code>&quot;maskCanvas&quot;</code>. Specifies the height in which objects can be rendered within a <a href="../../../api/type/TextureResourceCanvas/index.html">TextureResourceCanvas</a>.</p>
 </div>
 <div id="pixelwidth-optional" class="section level5">
 <h5>pixelWidth <sub><sup>(optional)</sup></sub></h5>
-<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code>. Specifies the horizontal pixel dimensions of the texture that the canvas resource is rendered to.</p>
+<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code> or <code>&quot;maskCanvas&quot;</code>. Specifies the horizontal pixel dimensions of the texture that the canvas resource is rendered to.</p>
 </div>
 <div id="pixelheight-optional" class="section level5">
 <h5>pixelHeight <sub><sup>(optional)</sup></sub></h5>
-<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code>. Specifies the vertical pixel dimensions of the texture that the canvas resource is rendered to.</p>
+<p><em><a href="../../../api/type/Number.html">Number</a>.</em> Only applies when <code>type</code> is <code>&quot;canvas&quot;</code> or <code>&quot;maskCanvas&quot;</code>. Specifies the vertical pixel dimensions of the texture that the canvas resource is rendered to.</p>
 </div>
 </div>
 <div id="examples" class="section level2">

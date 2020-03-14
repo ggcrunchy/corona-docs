@@ -9,7 +9,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Corona Documentation — API Reference | Events | enterFrame</title>
+  <title>Corona Documentation — API Reference | type | Runtime | getFrameStartTime</title>
   <meta name="description" content="Corona lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
   <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
   <link rel="stylesheet" href="../../../css/shCoreDefault.css" type="text/css" />
@@ -54,78 +54,70 @@
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#enterframe">enterFrame</a><ul>
+<li><a href="#runtime.getframestarttime">Runtime.getFrameStartTime()</a><ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#properties">Properties</a><ul>
-<li><a href="#event.frameapi.event.enterframe.frame"><a href="../../../api/event/enterFrame/frame.html">event.frame</a></a></li>
-<li><a href="#event.nameapi.event.enterframe.name"><a href="../../../api/event/enterFrame/name.html">event.name</a></a></li>
-<li><a href="#event.timeapi.event.enterframe.time"><a href="../../../api/event/enterFrame/time.html">event.time</a></a></li>
-</ul></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#event-name">Event Name</a></li>
-<li><a href="#event-time">Event Time</a></li>
-</ul></li>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#example">Example</a></li>
 </ul></li>
 </ul>
 </div>
 <div id="breadcrumb">
-<a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../api/index.html">API Reference</a>  ▸  <a href="../../../api/event/index.html">Events</a>  ▸  <a href="../../../api/event/enterFrame/index.html">enterFrame</a>
+<a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../api/index.html">API Reference</a>  ▸  <a href="../../../api/type/index.html">type</a>  ▸  <a href="../../../api/type/Runtime/index.html">Runtime</a>  ▸  <a href="../../../api/type/Runtime/getFrameStartTime.html">getFrameStartTime</a>
 </div>
-<div id="enterframe" class="section level1">
-<h1>enterFrame</h1>
+<div id="runtime.getframestarttime" class="section level1">
+<h1>Runtime.getFrameStartTime()</h1>
 <blockquote>
 <table>
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Type</strong></td>
-<td align="left"><a href="../../../api/type/Event.html">Event</a></td>
+<td align="left"><a href="../../../api/type/Function.html">Function</a></td>
 </tr>
 <tr class="even">
+<td align="left"><strong>Object</strong></td>
+<td align="left"><a href="../../../api/type/Runtime/index.html">Runtime</a></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Library</strong></td>
+<td align="left">none</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Return value</strong></td>
+<td align="left"><a href="../../../api/type/Number.html">Number</a></td>
+</tr>
+<tr class="odd">
 <td align="left"><strong>Revision</strong></td>
 <td align="left"><a href="https://coronalabs.com/links/docs/current-corona-sdk">Current Public Release (2018.3326)</a></td>
 </tr>
-<tr class="odd">
-<td align="left"><strong>Keywords</strong></td>
-<td align="left">enterFrame, runtime</td>
-</tr>
 <tr class="even">
+<td align="left"><strong>Keywords</strong></td>
+<td align="left">runtime, getFrameStartTime</td>
+</tr>
+<tr class="odd">
 <td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../guide/events/detectEvents/index.html">Basic Interactivity and Event Detection</a> <em>(guide)</em></td>
+<td align="left"><a href="../../../api/type/Runtime/getFrameID.html">Runtime.getFrameID()</a></td>
 </tr>
 </tbody>
 </table>
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p><code>&quot;enterFrame&quot;</code> events occur at the <nobr>frames-per-second</nobr> interval of the application, either 30 or 60 as specified in <code>config.lua</code>. They are only dispatched to the global <a href="../../../api/type/EventDispatcher/index.html">Runtime</a> object.</p>
+<p>Returns the time (in milliseconds) at the start of this frame.</p>
+<p>ALSO enterFrame as 'time', but this is aimed at complementing getFrameID</p>
+<p>BLAH BLAH</p>
+<p>Determines if the device is capable of providing events for a given event source such as <code>&quot;accelerometer&quot;</code> or <code>&quot;gyroscope&quot;</code>.</p>
+<p>This function returns <code>true</code> if the event source exists, meaning it is okay to call <a href="../../../api/type/EventDispatcher/addEventListener.html">EventDispatcher:addEventListener()</a> to handle its events.</p>
+<p>It returns <code>false</code> if the event source does not exist. For example, if this returns false for <code>&quot;gyroscope&quot;</code> then this would indicate that the appropriate hardware was not found on the device.</p>
 </div>
-<div id="properties" class="section level2">
-<h2>Properties</h2>
-<div id="event.frameapi.event.enterframe.frame" class="section level4">
-<h4><a href="../../../api/event/enterFrame/frame.html">event.frame</a></h4>
+<div id="syntax" class="section level2">
+<h2>Syntax</h2>
+<pre class="brush: lua;">Runtime.getFrameStartTime( )</pre>
 </div>
-<div id="event.nameapi.event.enterframe.name" class="section level4">
-<h4><a href="../../../api/event/enterFrame/name.html">event.name</a></h4>
-</div>
-<div id="event.timeapi.event.enterframe.time" class="section level4">
-<h4><a href="../../../api/event/enterFrame/time.html">event.time</a></h4>
-</div>
-</div>
-<div id="examples" class="section level2">
-<h2>Examples</h2>
-<div id="event-name" class="section level5">
-<h5>Event Name</h5>
-<pre class="brush: lua;">local myListener = function( event )
-    print( "Listener called with event of type " .. event.name )
-end
-Runtime:addEventListener( "enterFrame", myListener )</pre>
-</div>
-<div id="event-time" class="section level5">
-<h5>Event Time</h5>
-<pre class="brush: lua;">local function printTimeSinceStart( event )
-    print ( tostring(event.time/1000) .. " seconds since app started." )
-end 
-Runtime:addEventListener( "enterFrame", printTimeSinceStart )</pre>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<pre class="brush: lua;">if Runtime:hasEventSource( "gyroscope" ) then
+    Runtime:addEventListener( "gyroscope", myListener )
+end</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
@@ -134,8 +126,7 @@ Runtime:addEventListener( "enterFrame", printTimeSinceStart )</pre>
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
 </p>
-<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=api.event.enterFrame.index&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
-</div>
+<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=api.type.Runtime.getFrameStartTime&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
 </div>
 </div>
 </div>
