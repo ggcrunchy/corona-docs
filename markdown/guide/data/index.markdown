@@ -5,7 +5,7 @@
 * [Reading and Writing Files][guide.data.readWriteFiles]
 * [Lua String Manipulation][guide.data.luaString]
 * [Lua File System (LFS)][guide.data.LFS]
-* [Numbers in Lua][guide.data.numbers]
+* [Numbers in Lua][guide.data.numbersInLua]
 
 </div>
 
@@ -14,6 +14,6 @@
 ### [Reading and Writing Files][guide.data.readWriteFiles]
 ### [Lua String Manipulation][guide.data.luaString]
 ### [Lua File System (LFS)][guide.data.LFS]
-### [Numbers in Lua][guide.data.numbers]
+### [Numbers in Lua][guide.data.numbersInLua]
 
 </div>
