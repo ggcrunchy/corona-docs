@@ -48,7 +48,7 @@ The remaining 52 bits have bit pattern `0101111` followed by 45 zeroes, or 1,653
 
 If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2<sup>5</sup> / 2<sup>52</sup> = 2<sup>-47</sup>. This is the "unit of least precision" / "unit in the last place", or ulp, for this range. Furthermore, turning this idea around tells us we land exactly on an integer every 2<sup>47</sup> steps, starting from 0: 32, 33, 34...
 
-Doing the same thing with \[64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. **TODO** last comment playing too loose?
+Doing the same thing with \[64, 128), we can represent values every 1/2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. **TODO** last comment playing too loose?
 
 The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, **every** value in that range is an integer, with no gaps.
 
@@ -56,7 +56,7 @@ The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</
 
 In \[2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.
 
-Most of the foregoing applies to negative exponents as well. In the range \[1 / 8, 1 / 4), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is **huge**! We will never land on an integer in this region, of course.
+Most of the foregoing applies to negative exponents as well. In the range \[1/8, 1/4), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is **huge**! We will never land on an integer in this region, of course.
 
 **TODO** in fact, half of all representable values...
 
@@ -122,7 +122,7 @@ According to the OpenGL ES2 specification (see for instance, the "Qualifiers" se
 
 With "high" precision&mdash;only guaranteed in the vertex kernel&mdash;we have at least 16 bits fraction: a more generous 65536 slots, plus values from 2<sup>-62</sup> to 2<sup>62</sup>, for 7 bits of exponent.
 
-These sizes are much tighter than their Lua equivalents, especially in medium precision! They arise from various efficiency concerns on mobile. It's quite easy to wander into the ranges where we can only take steps of say 1 / 8 or 1 / 4, which can manifest in choppy visuals. Mitigating these effects is a key challenge in authoring shaders.
+These sizes are much tighter than their Lua equivalents, especially in medium precision! They arise from various efficiency concerns on mobile. It's quite easy to wander into the ranges where we can only take steps of say 1/8 or 1/4, which can manifest in choppy visuals. Mitigating these effects is a key challenge in authoring shaders.
 
 Even when we're "not using shaders", Corona itself is, in the form of a texture lookup followed by a pixel plot. The lookup coordinates are implemented as floats on the shader side, and occasionally we will see rather mysterious behaviors arise as a result. Larger textures might exhibit shimmering, for instance, on certain edges or corners, as the numbers grow close to 1 and get rounded; thus the call for wider sprite sheet padding on large textures.
 

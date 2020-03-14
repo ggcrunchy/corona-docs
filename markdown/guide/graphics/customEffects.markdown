@@ -125,13 +125,13 @@ When using these variables, you need to tell Corona that your shader requires th
 kernel.isTimeDependent = true
 `````
 
-If `isTimeDependent` is defined, Corona will also look for `timeTransform`. If this exists, it must be a table and should have one of the following as its `func` member: `"modulo"`, `"pingpong"`, `"sine"`. The value of `CoronaTotalTime` within the shader will be the result of any such transformation.
+When `isTimeDependent` is defined, Corona will also look for `timeTransform`. If this exists, it must be a table and should have one of the following as its `func` member: `"modulo"`, `"pingpong"`, `"sine"`. The value of `CoronaTotalTime` within the shader will be the result of any such transformation.
 
-The `"modulo"` transform is computed as `CoronaTotalTime = CoronaTotalTime % range`, where range is a positive number that may be supplied in the `timeTransform` table under that same key. By default, `range` is 1.
+The `"modulo"` transform is computed as `CoronaTotalTime = CoronaTotalTime % range`, where `range` is a positive number that may be supplied in the `timeTransform` table under that same key. By default, `range` is 1.
 
 The `"pingpong"` transform is similar, except `CoronaTotalTime` will first go from 0 to `range` (no default, in this case), then fall back to 0, then repeat.
 
-The `"sine"` transform is computed as `CoronaTotalTime = amplitude * sin(scale * CoronaTotalTime + phase)`. Again, `amplitude` and `phase` may be provided in the `timeTransform` table, with defaults 1 and 0 respectively. The scale is calculated from a `period` parameter, a positive number indicating how much time should pass before the sine waves repeats. The default is 2 \* π, which has a scale factor of 1.
+The `"sine"` transform is computed as `CoronaTotalTime = amplitude * sin(scale * CoronaTotalTime + phase)`. Again, `amplitude` and `phase` may be provided in the `timeTransform` table, with defaults 1 and 0 respectively. The scale is calculated from a `period` parameter, a positive number indicating how much time should pass before the sine wave repeats. The default is 2 \* π, which has a scale factor of 1.
 
 `````lua
 graphics.defineEffect{
@@ -600,15 +600,15 @@ Branching instructions (`if` conditions) are expensive. When possible, `for` loo
 
 Corona's shaders use [IEEE-754 floats](https://en.wikipedia.org/wiki/IEEE_754) as the underlying representation for their numeric values.
 
-For the majority of cases (the exceptions are irrelevant here), part of the number constitutes an integer numerator. Let's call this _N_. Our numerator can go from 0 to _D_ - 1, _D_ being a constant power of 2. Together these give us a scale factor _t_ = _N_ / _D_ in the range \[0, 1).
+For the majority of cases (the exceptions are irrelevant here), part of the number constitutes an integer numerator. Let's call this `N`. Our numerator can go from 0 to `D` - 1, `D` being a constant power of 2. Together these give us a scale factor `t = N / D` in the range \[0, 1).
 
-The rest of the number is devoted to the sign (positive or negative) and the exponent, the latter being an integer that gives us a power of 2, for instance 2<sup>5</sup>. We obtain values by interpolating between neighboring powers, using the scale factor: _result_ = 2<sup>p</sup> \* (1 + _t_) Notice that if _t_ were 1 we would land on the next power of 2.
+The rest of the number is devoted to the sign (positive or negative) and the exponent, the latter being an integer that gives us a power of 2, for instance 2<sup>5</sup>. We obtain values by interpolating between neighboring powers, using the scale factor: `result` = 2<sup>p</sup> \* (1 + `t`) Notice that if `t` were 1 we would land on the next power of 2.
 
-This can exactly represent some values, but will only approximate most. Any format is going to have such idiosyncracies. IEEE-754 happens to provide a lot of accuracy near 0 while also giving us exact integers all the way up to 2 \* _D_.
+This can exactly represent some values, but will only approximate most. Any format is going to have such idiosyncracies. IEEE-754 happens to provide a lot of accuracy near 0 while also giving us exact integers all the way up to 2 \* `D`.
 
 Lua offers us 64-bit floats, with rather generous 52-bit numerators and accompanying accuracy. On GPUs we are rarely so lucky, especially with mobile hardware, owing to concerns like bandwidth and memory.
 
-For instance, see the ["Qualifiers"](https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf) section in this OpenGL ES 2.0 reference card. With **mediump** our _D_ is only guaranteed to be an underwhelming 1024.
+For instance, see the ["Qualifiers"](https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf) section in this OpenGL ES 2.0 reference card. With **mediump** our `D` is only guaranteed to be an underwhelming 1024.
 
 Now imagine what this means for time, measured in seconds. At first, we'll be just fine. But just after the two-minute mark, interpolating between 128 and 256, we only go in steps of (256 - 128) / 1024, or 1/8 second accuracy. At five minutes we'll proceed in increments of 1/4, and so on. Anything relying on such results becomes quite choppy.
 
