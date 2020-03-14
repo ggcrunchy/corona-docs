@@ -163,5 +163,6 @@ These are current guides on selected topics. For the most current <nobr>API-spec
 * [Reading and Writing Files][guide.data.readWriteFiles]
 * [Lua String Manipulation][guide.data.luaString]
 * [Lua File System (LFS)][guide.data.LFS]
+* [Numbers in Lua][guide.data.numbersInLua]
 
 </div>
