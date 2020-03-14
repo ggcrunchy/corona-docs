@@ -77,7 +77,7 @@ Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often w
 
 Now, while 0 is obviously important, the rest often complicate things. For correctness, mathematical libraries must go through all sorts of hoops to account for the various corner cases. This can slow down code appreciably, enough that many compilers offer "fast math" switches to disable the logic altogether.
 
-<a id="exact-results></a>
+<a id="exact-results"></a>
 
 ## Exact Results
 
