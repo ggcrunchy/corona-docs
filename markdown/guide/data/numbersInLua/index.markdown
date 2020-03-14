@@ -30,11 +30,13 @@ Numbers in Corona are 64-bit values, interpreted by Lua 5.1 as double-precision 
 
 Most of our numbers lie between neighboring powers of 2. For instance, 43.75 follows 32 (2<sup>5</sup>) but comes before 64 (2<sup>6</sup>).
 
-The numbers 43.75 and -43.75 have hexadecimal forms 0x4045e00000000000 and 0xc045e00000000000, apparently quite similar. In fact, the only difference is that the negative number has its highest bit set. And indeed, this "sign bit" is set aside for exactly this purpose.
+The numbers 43.75 and -43.75 have hexadecimal forms `0x4045e00000000000` and `0xc045e00000000000`, apparently quite similar. In fact, the only difference is that the negative number has its highest bit set. And indeed, this "sign bit" is set aside for exactly this purpose.
 
 What follows will focus on positive numbers, but the analysis is largely the same for negatives.
 
-Our next 11 bits have pattern 10000000100, or 1028 in decimal. This doesn't seem very helpful, but if we subtract 1023 from it we recover the exponent 5, giving us our interval \[2<sup>5</sup>, 2<sup>6</sup>). Exponents are biased in this way to give us the powers of 2 less than 1&mdash;1/2, 1/4, and so on&mdash;letting us represent ranges from \[2<sup>-1022</sup>, 2<sup>-1021</sup>) at the low end all the way up to \[2<sup>1023</sup>, 2<sup>1024</sup>).
+Our next 11 bits have pattern `10000000100`, or 1028 in decimal. This doesn't seem very helpful, but if we subtract 1023 from it we recover the exponent 5, giving us our interval \[2<sup>5</sup>, 2<sup>6</sup>). Exponents are biased in this way to give us the powers of 2 less than 1&mdash;1/2, 1/4, and so on&mdash;letting us represent ranges from \[2<sup>-1022</sup>, 2<sup>-1021</sup>) at the low end all the way up to \[2<sup>1023</sup>, 2<sup>1024</sup>).
+
+**TODO** this is pretty clumsy still
 
 **TODO** try to convey the scope of these numbers?
 
@@ -42,29 +44,39 @@ Our next 11 bits have pattern 10000000100, or 1028 in decimal. This doesn't seem
 
 ## The Fraction Bits
 
-The remaining 52 bits have bit pattern 0101111 followed by 45 zeroes, or 1,653,665,488,175,104. Dividing this value by 2<sup>52</sup> gives us our relative position: 0.3671875 of the way along the \[32, 64) interval, exactly what we obtain from (43.75 - 32) / (64 - 32).
+The remaining 52 bits have bit pattern `0101111` followed by 45 zeroes, or 1,653,665,488,175,104. Dividing this value by 2<sup>52</sup> gives us our relative position: 0.3671875 of the way along the \[32, 64) interval, exactly what we obtain from (43.75 - 32) / (64 - 32).
 
 If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2<sup>5</sup> / 2<sup>52</sup> = 2<sup>-47</sup>. This is the "unit of least precision" / "unit in the last place", or ulp, for this range. Furthermore, turning this idea around tells us we land exactly on an integer every 2<sup>47</sup> steps, starting from 0: 32, 33, 34...
 
 Doing the same thing with \[64, 128), we can represent values every 1 / 2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. **TODO** last comment playing too loose?
 
-The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, **every** value in that range is an integer. In \[2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.
+The situation with integers prevails all the way to \[2<sup>52</sup>, 2<sup>53</sup>), where we have (2<sup>53</sup> - 2<sup>52</sup>) / 2<sup>52</sup> = 1. In other words, **every** value in that range is an integer, with no gars.
 
-Most of the foregoing applies to negative exponents as well. In the range \[2<sup>-3</sup>, 2<sup>-2</sup>), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is **huge**! We will never land on an integer in this region, of course.
+**TODO** expand one or two of the large powers out for some variety / sense of size?
+
+In \[2<sup>53</sup>, 2<sup>54</sup>), our ulp of 2 is now wide enough to miss: 2<sup>53</sup>, 2<sup>53</sup> + 2, etc. Subsequent ranges only get worse, obviously.
+
+Most of the foregoing applies to negative exponents as well. In the range \[1 / 8, 1 / 4), we have (2<sup>-2</sup> - 2<sup>-3</sup>) / 2<sup>52</sup> = 2<sup>-55</sup>. The set of representable values less than 1 is **huge**! We will never land on an integer in this region, of course.
+
+**TODO** in fact, half of all representable values...
 
 <a id="special-cases"></a>
 
 ## Special Cases
 
-With 11 bits, we should have 2048 exponents available to us, but our ranges as described above fall short by 2. As it happens, patterns 00000000000 and 11111111111 are set aside for a few special cases.
+With 11 bits, we should have 2048 exponents available to us, but our ranges as described above fall short by 2. As it happens, patterns `00000000000` and `11111111111` are set aside for a few special cases.
 
 ### All 0s
 
-While nestling numbers between powers of 2 represents plenty of numbers, it puts one conspicuous value in an awkward place: 0! Numerically speaking, of course, this is not between any neighboring powers, since its absolute value is always less than any of them.
+While nestling numbers between powers of 2 represents plenty of numbers, it puts one conspicuous value in an awkward place: 0!
 
-This is addressed by the all-0s exponent pattern, when the fraction is 0 as well. A useful property is that all bits 0 is itself 0. Curiously, the sign bit remains, so we can also have -0; this usually goes without notice, but can be surprising when printing values.
+Numerically speaking, its absolute value is less than **any** power. A corollary of this is that it won't be found between a consecutive pair of them.
 
-The all-0s exponent might also be paired with a non-0 fraction, giving us the so-called denormals. This is the \[0, 2<sup>-1022</sup>) range, with ulp = 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822e<sup>-324</sup>.
+This is addressed by the all-0s exponent pattern, when the fraction bits are all 0 as well.
+
+Curiously, the sign bit is **not** required to be 0, so we can end up with a "negative" 0. This is generally unremarkable as far as operations go, but can be surprising when we print the results!
+
+The all-0s exponent might also be paired with a non-0 fraction, giving us the so-called denormals. This is the \[0, 2<sup>-1022</sup>) range, with ulp = 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822 \* 10<sup>-324</sup>.
 
 ### All 1s
 
@@ -90,7 +102,7 @@ However, many if not most numbers we type into our editors will be "careless" an
 
 **TODO** happens when result of an add, multiply, etc. isn't representable
 
-**TODO** maybe we should walk through an example or two?
+**TODO** maybe we should walk through an example or two? (e.g. "normal" case; result of computation; incrementing huge numbers)
 
 <a id="other-precisions"></a>
 
@@ -106,7 +118,7 @@ NOTE the following is still rough, maybe needs some expansion to emphasize where
 
 We see doubles in Lua, and often both varieties in native code. Floating point also shows up in Corona's shaders. "High precision fragment shader" support, for instance, comes into play on mobile platforms, and basically boils down to how many bits the driver grants to our numbers in fragment kernels.
 
-According to the OpenGL ES2 specification (see for instance, page 3 [here](https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf)), "medium" precision&mdash;which is available in both vertex and fragment kernels&mdash;must offer at least 10 bits of fraction: 1024-wide ranges. Furthermore, it promises the swath of values from 2<sup>-14</sup> to 2<sup>14</sup>, suggesting 5 bits of exponent with allowances for the aforementioned special cases. Internally, these will probably be 16-bit values.
+According to the OpenGL ES2 specification (see for instance, the "Qualifiers" section [here](https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf)), "medium" precision&mdash;which is available in both vertex and fragment kernels&mdash;must offer at least 10 bits of fraction: 1024-wide ranges. Furthermore, it promises the swath of values from 2<sup>-14</sup> to 2<sup>14</sup>, suggesting 5 bits of exponent with allowances for the aforementioned special cases. Internally, these will probably be 16-bit values.
 
 With "high" precision&mdash;only guaranteed in the vertex kernel&mdash;we have at least 16 bits fraction: a more generous 65536 slots, plus values from 2<sup>-62</sup> to 2<sup>62</sup>, for 7 bits of exponent.
 
@@ -117,6 +129,8 @@ Even when we're "not using shaders", Corona itself is, in the form of a texture 
 **TODO** lowp seem to be 10-bit denormals? not sure if worth including
 
 Although the specification's guarantees leave room for the special cases, mobile hardware will often go the "fast math" route, only supporting 0 and leaving out denormals, infinity, and NaN.
+
+**TODO** could add some snippets to encode paired floats and decode them too (in Lua and shaders both)?
 
 **TODO** conclusion?
 
