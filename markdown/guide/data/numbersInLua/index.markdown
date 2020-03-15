@@ -68,29 +68,47 @@ With 11 bits, we should have 2048 exponents available to us, but our ranges as d
 
 ### All 0s
 
-While nestling numbers between powers of 2 represents plenty of numbers, it puts one conspicuous value in an awkward place: 0!
+#### Zero
 
-Numerically speaking, its absolute value is less than **any** power. A corollary of this is that it won't be found between a consecutive pair of them.
+Nestling numbers between powers of 2 offers plenty of representation, but it leads to quite a glaring omission: **0**!
 
-This is addressed by the all-0s exponent pattern, when the fraction bits are all 0 as well.
+Numerically speaking, 0's absolute value is less than **any** power. As a result, it won't be found between a consecutive pair of them.
+
+To account for this, we interpret a number as 0 when both its exponent and fraction bits are all 0.
 
 Curiously, the sign bit is **not** required to be 0, so we can end up with a "negative" 0. This is generally unremarkable as far as operations go, but can be surprising when we print the results!
 
-The all-0s exponent might also be paired with a non-0 fraction, giving us the so-called denormals. This is the \[0, 2<sup>-1022</sup>) range, with ulp = 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822 \* 10<sup>-324</sup>.
+#### Denormals
+
+If only the exponent bits are all 0, we have the so-called denormals.
+
+These are the (0, 2<sup>-1022</sup>) range, with the fraction interpreted as before. Our ulp is 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822 \* 10<sup>-324</sup>.
 
 ### All 1s
 
-As mentioned, all-1s exponent patterns also have special meanings.
+The situation goes similarly when the exponent bits are all 1.
 
-For starters, with a fraction of 0 we get infinity. If we divide a vanilla number by infinity, we get 0 back; any other arithmetic results in infinity again. <double check a couple cases here> We can introduce this value ourselves by dividing by 0, for instance `1 / 0` or `-1 / 0`.
+#### Infinity
 
-A non-0 fraction will give us "Not a Number", often abbreviated as NaN or nan. These arise from bogus computations like `0 / 0` (handy for adding NaNs in code) or where garden-variety numbers are inadequate, such as `math.sqrt(-1)`. Like infinity, NaN is contagious: any arithmetic with one results in another NaN.
+For starters, a fraction of 0 gives us "infinity".
 
-A NaN has the interesting property of not being equal to itself. Code such as `x ~= x` is used to detect them.
+If we divide a vanilla number by infinity, we get 0 back; any other arithmetic results in infinity again. **TODO** double check a couple cases here, maybe expand a bit
 
-Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often we only care if a value is one or not. It is in fact quite common to hijack these 52 bits and store some data there when the value isn't being used as a number. **TODO** example?
+We can introduce this value ourselves by dividing by 0, for instance `1 / 0` or `-1 / 0`.
 
-Now, while 0 is obviously important, the rest often complicate things. For correctness, mathematical libraries must go through all sorts of hoops to account for the various corner cases. This can slow down code appreciably, enough that many compilers offer "fast math" switches to disable the logic altogether.
+#### Not a Number
+
+A non-0 fraction will give us "Not a Number", often abbreviated as NaN or nan.
+
+These arise from bogus computations like `0 / 0` (a handy way to introduce our own) or where garden-variety numbers are inadequate, such as `math.sqrt(-1)`. Like infinity, NaN is contagious: any arithmetic with one results in another NaN, as will calls to most functions in `math` with NaN arguments.
+
+A NaN has the interesting property of not being equal to any value, including itself. Thus we can detect them like `x ~= x`. This is in fact the only case where this holds in Lua, since primitive equality will supersede any **"eq"** metamethod.
+
+Strictly speaking, we have 2<sup>52</sup> - 1 different NaNs available, though often we only care **whether** we have one. It is not unusual to hijack these 52 bits, storing some data there when our value isn't being used as a number. **TODO** example?
+
+**TODO** quiet / signaling
+
+Apart from 0, with its obvious everyday importance, these special cases often complicate things. Mathematical libraries must go through all sorts of hoops to maintain correctness when they come up. This can slow down code appreciably, enough that many compilers offer "fast math" switches. These will dispense with the handling, avoiding the costs, but it puts the onus on us to provide "nice" numbers.
 
 <a id="exact-results"></a>
 
@@ -99,6 +117,8 @@ Now, while 0 is obviously important, the rest often complicate things. For corre
 There are **many** values this scheme is able to represent exactly; with the above details in mind, we can even come up with some ourselves.
 
 However, many if not most numbers we type into our editors will be "careless" and inexact. In this case, en route from text to running program, the number will be rounded toward a truly representable value.
+
+**TODO** as factor, e.g. 2<sup>-52</sup> = 2<sup>-2</sup> \* 2<sup>-50</sup>, thus can build up in terms of 1/4ths, (43.75 - 32) = 11.75, which is 47 of them; after multiply by 32, 2<sup>-50</sup> \* 2<sup>5</sup> = 2<sup>-45</sup> for our 45-bit shift (more natural to approach this backward, I think)
 
 **TODO** happens when result of an add, multiply, etc. isn't representable
 
