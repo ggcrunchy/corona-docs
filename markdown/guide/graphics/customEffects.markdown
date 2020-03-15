@@ -602,11 +602,11 @@ Corona's shaders use [IEEE-754 floats](https://en.wikipedia.org/wiki/IEEE_754) a
 
 For the majority of cases (the exceptions are irrelevant here), part of a floating-point number specifies an integer numerator. Let's call this `N`. Our numerator can go from `0` to `D - 1`, where `D` is a fixed power of 2. Together these give us a scale factor `t = N / D` in the range \[0, 1).
 
-The rest of the number is devoted to the sign (positive or negative) and an exponent, the latter being another integer that gives us a power of 2, for instance 2<sup>5</sup>.
+The rest of the number is devoted to the sign (positive or negative) and an exponent, the latter being another integer that gives us a power of 2, for instance 2<sup>-3</sup> or 2<sup>5</sup>.
 
-Putting these together, we decode our numbers by interpolating between neighboring powers&mdash;with exponents `p` and `p + 1`&mdash;using the scale factor: `result = 2^p * (1 + t)`. Notice that, if `t` were 1, we would be on the next power of 2.
+We decode our numbers by interpolating between neighboring powers&mdash;with exponents `p` and `p + 1`&mdash;using the scale factor: `result = 2^p * (1 + t)`. Notice that, if `t` were 1, we would be on the next power of 2.
 
-This can exactly represent some values, but will only approximate most. Any format is going to have such idiosyncracies. IEEE-754 happens to provide a lot of accuracy near 0 while also giving us exact integers all the way up to `2 * D`.
+This can exactly represent some values, but will only approximate most. Any format is going to have such idiosyncracies. IEEE-754 offers considerable accuracy near 0 while also giving us exact integers all the way up to `2 * D`.
 
 Lua offers us 64-bit floats, with rather generous 52-bit numerators and accompanying accuracy. On GPUs we are rarely so lucky, especially on mobile hardware, owing to concerns like bandwidth and memory.
 
