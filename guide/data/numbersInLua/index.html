@@ -59,8 +59,14 @@
 <li><a href="#the-exponent-bits">The Exponent Bits</a></li>
 <li><a href="#the-fraction-bits">The Fraction Bits</a></li>
 <li><a href="#special-cases">Special Cases</a><ul>
-<li><a href="#all-0s">All 0s</a></li>
-<li><a href="#all-1s">All 1s</a></li>
+<li><a href="#all-0s">All 0s</a><ul>
+<li><a href="#zero">Zero</a></li>
+<li><a href="#denormals">Denormals</a></li>
+</ul></li>
+<li><a href="#all-1s">All 1s</a><ul>
+<li><a href="#infinity">Infinity</a></li>
+<li><a href="#not-a-number">Not a Number</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#exact-results">Exact Results</a></li>
 <li><a href="#other-precisions">Other Precisions</a><ul>
@@ -123,27 +129,45 @@
 <p>With 11 bits, we should have 2048 exponents available to us, but our ranges as described above fall short by 2. As it happens, patterns <code>00000000000</code> and <code>11111111111</code> are set aside for a few special cases.</p>
 <div id="all-0s" class="section level3">
 <h3>All 0s</h3>
-<p>While nestling numbers between powers of 2 represents plenty of numbers, it puts one conspicuous value in an awkward place: 0!</p>
-<p>Numerically speaking, its absolute value is less than <strong>any</strong> power. A corollary of this is that it won't be found between a consecutive pair of them.</p>
-<p>This is addressed by the all-0s exponent pattern, when the fraction bits are all 0 as well.</p>
+<div id="zero" class="section level4">
+<h4>Zero</h4>
+<p>Nestling numbers between powers of 2 offers plenty of representation, but it leads to quite a glaring omission: <strong>0</strong>!</p>
+<p>Numerically speaking, 0's absolute value is less than <strong>any</strong> power. As a result, it won't be found between a consecutive pair of them.</p>
+<p>To account for this, we interpret a number as 0 when both its exponent and fraction bits are all 0.</p>
 <p>Curiously, the sign bit is <strong>not</strong> required to be 0, so we can end up with a &quot;negative&quot; 0. This is generally unremarkable as far as operations go, but can be surprising when we print the results!</p>
-<p>The all-0s exponent might also be paired with a non-0 fraction, giving us the so-called denormals. This is the [0, 2<sup>-1022</sup>) range, with ulp = 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822 * 10<sup>-324</sup>.</p>
+</div>
+<div id="denormals" class="section level4">
+<h4>Denormals</h4>
+<p>If only the exponent bits are all 0, we have the so-called denormals.</p>
+<p>These are the (0, 2<sup>-1022</sup>) range, with the fraction interpreted as before. Our ulp is 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822 * 10<sup>-324</sup>.</p>
+</div>
 </div>
 <div id="all-1s" class="section level3">
 <h3>All 1s</h3>
-<p>As mentioned, all-1s exponent patterns also have special meanings.</p>
-<p>For starters, with a fraction of 0 we get infinity. If we divide a vanilla number by infinity, we get 0 back; any other arithmetic results in infinity again. <double check a couple cases here> We can introduce this value ourselves by dividing by 0, for instance <code>1 / 0</code> or <code>-1 / 0</code>.</p>
-<p>A non-0 fraction will give us &quot;Not a Number&quot;, often abbreviated as NaN or nan. These arise from bogus computations like <code>0 / 0</code> (handy for adding NaNs in code) or where garden-variety numbers are inadequate, such as <code>math.sqrt(-1)</code>. Like infinity, NaN is contagious: any arithmetic with one results in another NaN.</p>
-<p>A NaN has the interesting property of not being equal to itself. Code such as <code>x ~= x</code> is used to detect them.</p>
-<p>Strictly speaking, we can have 2<sup>52</sup> - 1 different NaNs, though often we only care if a value is one or not. It is in fact quite common to hijack these 52 bits and store some data there when the value isn't being used as a number. <strong>TODO</strong> example?</p>
-<p>Now, while 0 is obviously important, the rest often complicate things. For correctness, mathematical libraries must go through all sorts of hoops to account for the various corner cases. This can slow down code appreciably, enough that many compilers offer &quot;fast math&quot; switches to disable the logic altogether.</p>
+<p>The situation goes similarly when the exponent bits are all 1.</p>
+<div id="infinity" class="section level4">
+<h4>Infinity</h4>
+<p>For starters, a fraction of 0 gives us &quot;infinity&quot;.</p>
+<p>If we divide a vanilla number by infinity, we get 0 back; any other arithmetic results in infinity again. <strong>TODO</strong> double check a couple cases here, maybe expand a bit</p>
+<p>We can introduce this value ourselves by dividing by 0, for instance <code>1 / 0</code> or <code>-1 / 0</code>.</p>
+</div>
+<div id="not-a-number" class="section level4">
+<h4>Not a Number</h4>
+<p>A non-0 fraction will give us &quot;Not a Number&quot;, often abbreviated as NaN or nan.</p>
+<p>These arise from bogus computations like <code>0 / 0</code> (a handy way to introduce our own) or where garden-variety numbers are inadequate, such as <code>math.sqrt(-1)</code>. Like infinity, NaN is contagious: any arithmetic with one results in another NaN, as will calls to most functions in <code>math</code> with NaN arguments.</p>
+<p>A NaN has the interesting property of not being equal to any value, including itself. Thus we can detect them like <code>x ~= x</code>. This is in fact the only case where this holds in Lua, since primitive equality will supersede any <strong>&quot;eq&quot;</strong> metamethod.</p>
+<p>Strictly speaking, we have 2<sup>52</sup> - 1 different NaNs available, though often we only care <strong>whether</strong> we have one. It is not unusual to hijack these 52 bits, storing some data there when our value isn't being used as a number. <strong>TODO</strong> example?</p>
+<p><strong>TODO</strong> quiet / signaling</p>
+<p>Apart from 0, with its obvious everyday importance, these special cases often complicate things. Mathematical libraries must go through all sorts of hoops to maintain correctness when they come up. This can slow down code appreciably, enough that many compilers offer &quot;fast math&quot; switches. These will dispense with the handling, avoiding the costs, but it puts the onus on us to provide &quot;nice&quot; numbers.</p>
 <p><a id="exact-results"></a></p>
+</div>
 </div>
 </div>
 <div id="exact-results" class="section level2">
 <h2>Exact Results</h2>
 <p>There are <strong>many</strong> values this scheme is able to represent exactly; with the above details in mind, we can even come up with some ourselves.</p>
 <p>However, many if not most numbers we type into our editors will be &quot;careless&quot; and inexact. In this case, en route from text to running program, the number will be rounded toward a truly representable value.</p>
+<p><strong>TODO</strong> as factor, e.g. 2<sup>-52</sup> = 2<sup>-2</sup> * 2<sup>-50</sup>, thus can build up in terms of 1/4ths, (43.75 - 32) = 11.75, which is 47 of them; after multiply by 32, 2<sup>-50</sup> * 2<sup>5</sup> = 2<sup>-45</sup> for our 45-bit shift (more natural to approach this backward, I think)</p>
 <p><strong>TODO</strong> happens when result of an add, multiply, etc. isn't representable</p>
 <p><strong>TODO</strong> maybe we should walk through an example or two? (e.g. &quot;normal&quot; case; result of computation; incrementing huge numbers)</p>
 <p><a id="other-precisions"></a></p>
