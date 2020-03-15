@@ -197,12 +197,12 @@ Notes
 <p>If you use these variables in your kernel's shader code, your kernel is implicitly <nobr>time-dependent</nobr>. In other words, your kernel will output different results and evolve as time progresses.</p>
 <p>When using these variables, you need to tell Corona that your shader requires the GPU to <nobr>re-render</nobr> the scene, even if there are no other changes to the display objects in the scene. You can do this by setting the <code>kernel.isTimeDependent</code> property in your kernel definition as indicated below. Note that you should only set this if your shader code is truly <nobr>time-dependent</nobr>, since it effectively forces the GPU to <nobr>re-render</nobr> every frame.</p>
 <pre class="brush: lua;">kernel.isTimeDependent = true</pre>
-<p>When <code>isTimeDependent</code> is defined, Corona will also look for <code>timeTransform</code>. If this exists, it must be a table and should have one of the following as its <code>func</code> member: <code>&quot;modulo&quot;</code>, <code>&quot;pingpong&quot;</code>, <code>&quot;sine&quot;</code>. The value of <code>CoronaTotalTime</code> within the shader will be the result of any such transformation.</p>
+<p>When <code>isTimeDependent</code> is defined, Corona will also look for <code>timeTransform</code>. If this exists, it must be a table with one of the following as its <code>func</code> member: <code>&quot;modulo&quot;</code>, <code>&quot;pingpong&quot;</code>, <code>&quot;sine&quot;</code>. The value of <code>CoronaTotalTime</code> within the shader will be the result of any such transformation.</p>
 <p>The <code>&quot;modulo&quot;</code> transform is computed as <code>CoronaTotalTime = CoronaTotalTime % range</code>, where <code>range</code> is a positive number that may be supplied in the <code>timeTransform</code> table under that same key. By default, <code>range</code> is 1.</p>
-<p>The <code>&quot;pingpong&quot;</code> transform is similar, except <code>CoronaTotalTime</code> will first go from 0 to <code>range</code> (no default, in this case), then fall back to 0, then repeat.</p>
-<p>The <code>&quot;sine&quot;</code> transform is computed as <code>CoronaTotalTime = amplitude * sin(scale * CoronaTotalTime + phase)</code>. Again, <code>amplitude</code> and <code>phase</code> may be provided in the <code>timeTransform</code> table, with defaults 1 and 0 respectively. The scale is calculated from a <code>period</code> parameter, a positive number indicating how much time should pass before the sine wave repeats. The default is 2 * π, which has a scale factor of 1.</p>
+<p>The <code>&quot;pingpong&quot;</code> transform is similar, except <code>CoronaTotalTime</code> will first go from 0 to <code>range</code> (no default, in this case), then fall back to 0, and repeat indefinitely.</p>
+<p>The <code>&quot;sine&quot;</code> transform is computed as <code>CoronaTotalTime = amplitude * sin(scale * CoronaTotalTime + phase)</code>. Again, <code>amplitude</code> and <code>phase</code> may be provided in the <code>timeTransform</code> table, with defaults 1 and 0 respectively. The scale is calculated from a <code>period</code> parameter, a positive number indicating how much time should pass before the sine wave repeats. The default is 2 * π, corresponding to a scale factor of 1.</p>
 <pre class="brush: lua;">graphics.defineEffect{
-    category = "generator", group = "time_tests", name = "pingpong",
+    category = "generator", group = "time", name = "pingpong",
 
     isTimeDependent = true, timeTransform = { func = "pingpong", range = 5 },
 
@@ -216,8 +216,8 @@ Notes
 
 local rect = display.newRect(300, 100, 50, 50)
 
-rect.fill.effect = "generator.time_tests.pingpong"</pre>
-<p>See <a href="#precisionissues">precision issues</a> for the motivation behind the transform.</p>
+rect.fill.effect = "generator.time.pingpong"</pre>
+<p>See the <a href="#precisionissues">precision issues</a> below for the motivation behind these transforms.</p>
 <p><a id="vertexsize"></a></p>
 </div>
 <div id="size" class="section level3">
@@ -605,14 +605,14 @@ v2.xz = v0 * v1; // GOOD: Write mask limits calculations</pre>
 <div id="precision-issues" class="section level2">
 <h2>Precision Issues</h2>
 <p>Corona's shaders use <a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754 floats</a> as the underlying representation for numbers.</p>
-<p>For the majority of cases (the exceptions are irrelevant here), part of a floating-point number specifies an integer numerator. Let's call this <code>N</code>. Our numerator can go from <code>0</code> to <code>D - 1</code>, where <code>D</code> is a fixed power of 2. Together these give us a scale factor <code>t = N / D</code> in the range [0, 1).</p>
+<p>In the majority of cases—the exceptions being irrelevant here—part of a floating-point number specifies an integer numerator. Let's call this <code>N</code>. Our numerator can go from <code>0</code> to <code>D - 1</code>, where <code>D</code> is a fixed power of 2. Together these give us a scale factor <code>t = N / D</code> in the range [0, 1).</p>
 <p>The rest of the number is devoted to the sign (positive or negative) and an exponent, the latter being another integer that gives us a power of 2, for instance 2<sup>-3</sup> or 2<sup>5</sup>.</p>
-<p>We decode our numbers by interpolating between neighboring powers—with exponents <code>p</code> and <code>p + 1</code>—using the scale factor: <code>result = 2^p * (1 + t)</code>. Notice that, if <code>t</code> were 1, we would be on the next power of 2.</p>
-<p>This can exactly represent some values, but will only approximate most. Any format is going to have such idiosyncracies. IEEE-754 offers considerable accuracy near 0 while also giving us exact integers all the way up to <code>2 * D</code>.</p>
-<p>Lua offers us 64-bit floats, with rather generous 52-bit numerators and accompanying accuracy. On GPUs we are rarely so lucky, especially on mobile hardware, owing to concerns like bandwidth and memory.</p>
+<p>We decode our numbers by interpolating between neighboring powers, with exponents <code>p</code> and <code>p + 1</code>, using the scale factor: <code>result = 2^p * (1 + t)</code>. Notice that, if <code>t</code> were 1, we would be on the <strong>next</strong> power of 2.</p>
+<p>This can exactly represent some values, but will only approximate most. Any format is going to have tradeoffs. IEEE-754 offers considerable accuracy near 0, as well as exact integers all the way up to <code>2 * D</code>.</p>
+<p>Lua offers us 64-bit floats, with rather generous 52-bit numerators. On GPUs we are rarely so lucky, especially on mobile hardware, owing to concerns like bandwidth and memory.</p>
 <p>For instance, see the <a href="https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf">&quot;Qualifiers&quot;</a> section in the OpenGL ES 2.0 reference card. With <strong>mediump</strong> our <code>D</code> is only guaranteed to be an underwhelming 1024.</p>
-<p>Now imagine what this means for time, measured in seconds. At first, we'll be totally fine. But just after the two-minute mark, interpolating between 128 and 256, we only go in steps of (256 - 128) / 1024, or 1/8th second accuracy. At five minutes we'll proceed in increments of 1/4, and so on. Anything relying on such results becomes quite choppy.</p>
-<p>This scenario is gloomier than it needs to be, however. The time is actually maintained in Corona as a single-precision float, with a respectable 23-bit numerator; the loss comes after it passes over to the GPU. Furthermore, many shaders want transformed results, such as <code>TrueTotalTime % X</code> or <code>sin(N * TrueTotalTime)</code>, whose absolute values are likely to be in the more precise lower numeric ranges. Time transforms let us do some of the more common possibilities on the Corona side and pass the nicer results along.</p>
+<p>Now imagine what this means for time, measured in seconds. At first, we'll be totally fine. But just after the two-minute mark, interpolating between 128 and 256, we can only take steps of (256 - 128) / 1024, or 1/8th of a second. At five minutes we'll proceed in increments of 1/4, and so on. Anything relying on such results becomes quite choppy.</p>
+<p>This scenario is gloomier than it needs to be, however. The time is actually maintained in Corona as a single-precision float, with a respectable 23-bit numerator; the loss comes after it makes its way to the GPU. Furthermore, many shaders want transformed results, something like <code>TrueTotalTime % X</code> or <code>sin(N * TrueTotalTime)</code>, whose absolute values are likely to be in the more precise lower numeric ranges. Time transforms let us do some of the more common possibilities on the Corona side and pass the nicer results along.</p>
 <p>Further details may be found on the <a href="../../guide/data/numbersInLua/index.html">Numbers in Lua</a> guide.</p>
 <hr>
 <div id="footer">
