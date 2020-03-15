@@ -608,7 +608,7 @@ We decode our numbers by interpolating between neighboring powers, with exponent
 
 This can exactly represent some values, but will only approximate most. Any format is going to have tradeoffs. IEEE-754 offers considerable accuracy near 0, as well as exact integers all the way up to `2 * D`.
 
-Lua offers us 64-bit floats, with rather generous 52-bit numerators. On GPUs we are rarely so lucky, especially on mobile hardware, owing to concerns like bandwidth and memory.
+On the CPU side of things, Lua gives us 64-bit floats, with rather generous 52-bit numerators. On GPUs we are rarely so lucky, especially on mobile hardware, owing to concerns like bandwidth and memory.
 
 For instance, see the ["Qualifiers"](https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf) section in the OpenGL ES 2.0 reference card. With **mediump** our `D` is only guaranteed to be an underwhelming 1024.
 
