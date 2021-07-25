@@ -1,14 +1,13 @@
 # Numbers in Lua
 
-This guide discusses how numbers are treated in Lua, and Corona in particular. **THIS IS A WORK IN PROGRESS**
+This guide discusses how numbers are treated in Lua, and Solar2D in particular. **THIS IS A WORK IN PROGRESS**
 
 <div class="guides-toc">
 
 * [Overview](#overview)
-* [The Exponent](#the-exponent-bits)
-* [The Fraction](#the-fraction-bits)
+* [Anatomy of a Number](#anatomy)
 * [Special Cases](#special-cases)
-* [Exact results](#exact-results)
+* [Exact Results](#exact-results)
 * [Other Precisions](#other-precisions)
 * [Links](#links)
 
@@ -18,7 +17,13 @@ This guide discusses how numbers are treated in Lua, and Corona in particular. *
 
 ## Overview
 
-Numbers in Corona are 64-bit values, interpreted by Lua 5.1 as double-precision IEEE-754 "float"s. This gives our numbers some flexibility, but comes with a few quirks.
+**TODO** Open with something a bit more common, like compared 5.5 + 1.5 to 1.4 + .6, to lead with the "this can get weird" thing
+
+<a id="anatomy"></a>
+
+## Anatomy of a Number
+
+Numbers in Solar2D are 64-bit values, interpreted by Lua 5.1 as double-precision IEEE-754 "float"s. This gives our numbers some flexibility, but comes with a few quirks.
 
 **TODO** +43.75 = 0x4045 e000 0000 0000 = 0 10000000100 010111100000000000000000‬00000000000000000000000000000000
 
@@ -26,15 +31,21 @@ Numbers in Corona are 64-bit values, interpreted by Lua 5.1 as double-precision 
 
 <a id="the-exponent-bits"></a>
 
-## The Exponent Bits
-
-Most of our numbers lie between neighboring powers of 2. For instance, 43.75 follows 32 (2<sup>5</sup>) but comes before 64 (2<sup>6</sup>).
+### The Sign Bit
 
 The numbers 43.75 and -43.75 have hexadecimal forms `0x4045e00000000000` and `0xc045e00000000000`, apparently quite similar. In fact, the only difference is that the negative number has its highest bit set. And indeed, this "sign bit" is set aside for exactly this purpose.
 
 What follows will focus on positive numbers, but the analysis is largely the same for negatives.
 
+### The Exponent Bits
+
+**TODO** restructure this a little so it follows well?
+
+Most of our numbers lie between neighboring powers of 2. For instance, 43.75 follows 32 (2<sup>5</sup>) but comes before 64 (2<sup>6</sup>).
+
 Our next 11 bits have pattern `10000000100`, or 1028 in decimal. This doesn't seem very helpful, but if we subtract 1023 from it we recover the exponent 5, giving us our interval \[2<sup>5</sup>, 2<sup>6</sup>). Exponents are biased in this way to give us the powers of 2 less than 1&mdash;1/2, 1/4, and so on&mdash;letting us represent ranges from \[2<sup>-1022</sup>, 2<sup>-1021</sup>) at the low end all the way up to \[2<sup>1023</sup>, 2<sup>1024</sup>).
+
+**TODO** would it be better to mention the shortfall here, rather than in Special Cases?
 
 **TODO** this is pretty clumsy still
 
@@ -42,11 +53,13 @@ Our next 11 bits have pattern `10000000100`, or 1028 in decimal. This doesn't se
 
 <a id="the-fraction-bits"></a>
 
-## The Fraction Bits
+### The Fraction Bits
 
 The remaining 52 bits have bit pattern `0101111` followed by 45 zeroes, or 1,653,665,488,175,104. Dividing this value by 2<sup>52</sup> gives us our relative position: 0.3671875 of the way along the \[32, 64) interval, exactly what we obtain from (43.75 - 32) / (64 - 32).
 
-If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2<sup>5</sup> / 2<sup>52</sup> = 2<sup>-47</sup>. This is the "unit of least precision" / "unit in the last place", or ulp, for this range. Furthermore, turning this idea around tells us we land exactly on an integer every 2<sup>47</sup> steps, starting from 0: 32, 33, 34...
+If we divvy this interval up, we get a spacing of (64 - 32) / 2<sup>52</sup> = 2<sup>5</sup> / 2<sup>52</sup> = 2<sup>-47</sup>. This is known as the "unit in the last place", or sometimes the "unit of least precision", ulp for short, in this range. Furthermore, turning this idea around tells us we land exactly on an integer every 2<sup>47</sup> steps, starting from 0: 32, 33, 34...
+
+**TODO** special step functions (next after, et al.)
 
 Doing the same thing with \[64, 128), we can represent values every 1/2<sup>46</sup>th of the way across the range, landing on an integer every 2<sup>46</sup> steps. Notice that our ulp has gotten wider, while our integers are more dense; the "floating point" terminology originates here. **TODO** last comment playing too loose?
 
@@ -64,41 +77,35 @@ Most of the foregoing applies to negative exponents as well. In the range \[1/8,
 
 ## Special Cases
 
-With 11 bits, we should have 2048 exponents available to us, but our ranges as described above fall short by 2. As it happens, patterns `00000000000` and `11111111111` are set aside for a few special cases.
+With 11 bits, we should have 2048 exponents available to us, but our ranges as described above fall short by 2. As it happens, these were set aside for a reason.
 
-### All 0s
-
-#### Zero
+### Zero
 
 Nestling numbers between powers of 2 offers plenty of representation, but it leads to quite a glaring omission: **0**!
 
 Numerically speaking, 0's absolute value is less than **any** power. As a result, it won't be found between a consecutive pair of them.
 
-To account for this, we interpret a number as 0 when both its exponent and fraction bits are all 0.
+To account for this, we interpret a number as 0 when its exponent bits are `00000000000` and the fraction is also 0.
 
 Curiously, the sign bit is **not** required to be 0, so we can end up with a "negative" 0. This is generally unremarkable as far as operations go, but can be surprising when we print the results!
 
-#### Denormals
+### Denormals
 
 If only the exponent bits are all 0, we have the so-called denormals.
 
-These are the (0, 2<sup>-1022</sup>) range, with the fraction interpreted as before. Our ulp is 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822 \* 10<sup>-324</sup>.
+This is the (0, 2<sup>-1022</sup>) range, with the fraction doing its standard duty. It gets special treatment since, having 0 as its lower bound, it runs up against the same problems as 0 itself. Our ulp is 2<sup>-1022</sup> / 2<sup>52</sup> = 4.9406564584124654417656879286822 \* 10<sup>-324</sup>.
 
-### All 1s
+### Infinity
 
-The situation goes similarly when the exponent bits are all 1.
-
-#### Infinity
-
-For starters, a fraction of 0 gives us "infinity".
+When our exponent bits are `11111111111`, a fraction of 0 gives us "infinity".
 
 If we divide a vanilla number by infinity, we get 0 back; any other arithmetic results in infinity again. **TODO** double check a couple cases here, maybe expand a bit
 
 We can introduce this value ourselves by dividing by 0, for instance `1 / 0` or `-1 / 0`.
 
-#### Not a Number
+### Not a Number
 
-A non-0 fraction will give us "Not a Number", often abbreviated as NaN or nan.
+Pairing an all-1s exponent with a non-0 fraction will give us a "Not a Number" value, often abbreviated as NaN or nan.
 
 These arise from bogus computations like `0 / 0` (a handy way to introduce our own) or where garden-variety numbers are inadequate, such as `math.sqrt(-1)`. Like infinity, NaN is contagious: any arithmetic with one results in another NaN, as will calls to most functions in `math` with NaN arguments.
 
@@ -124,19 +131,21 @@ However, many if not most numbers we type into our editors will be "careless" an
 
 **TODO** maybe we should walk through an example or two? (e.g. "normal" case; result of computation; incrementing huge numbers)
 
+**TODO** or of course revisit opening example
+
 <a id="other-precisions"></a>
 
 ## Other Precisions
 
 ### Single Precision
 
-We have been speaking of "double" precision floats. As the name suggests, there is also a single-precision variety. This is a 32-bit value, with 8 bits of exponent&mdash;biased by 127 **CHECK THIS!**&mdash;and 23 devoted to the fraction, with the sign bit as before. These tend to be preferred when memory matters more, such as keeping structures light for cache coherency or when bandwidth is a concern; the obvious downsides are reduced accuracy and numeric range.
+We have been speaking of "double" precision floats. As the name suggests, there is also a single-precision variety. This is a 32-bit value, with 8 bits of exponent&mdash;biased by 127&mdash;and 23 devoted to the fraction, with the sign bit as before. These tend to be preferred when memory matters more, such as keeping structures light for cache coherency or when bandwidth is a concern; the obvious downsides are reduced accuracy and numeric range.
 
 ### Mobile Shaders
 
 **TODO** the following is still rough, maybe needs some expansion to emphasize where we see issues in practice, e.g. shimmering on certain corners, especially with larger textures
 
-We see doubles in Lua, and often both varieties in native code. Floating point also shows up in Corona's shaders. "High precision fragment shader" support, for instance, comes into play on mobile platforms, and basically boils down to how many bits the driver grants to our numbers in fragment kernels.
+We see doubles in Lua, and often both varieties in native code. Floating point also shows up in Solar2D's shaders. "High precision fragment shader" support, for instance, comes into play on mobile platforms, and basically boils down to how many bits the driver grants to our numbers in fragment kernels.
 
 According to the OpenGL ES2 specification (see for instance, the "Qualifiers" section [here](https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf)), "medium" precision&mdash;which is available in both vertex and fragment kernels&mdash;must offer at least 10 bits of fraction: 1024-wide ranges. Furthermore, it promises the swath of values from 2<sup>-14</sup> to 2<sup>14</sup>, suggesting 5 bits of exponent with allowances for the aforementioned special cases. Internally, these will probably be 16-bit values.
 
@@ -144,7 +153,7 @@ With "high" precision&mdash;only guaranteed in the vertex kernel&mdash;we have a
 
 These sizes are much tighter than their Lua equivalents, especially in medium precision! They arise from various efficiency concerns on mobile. It's quite easy to wander into the ranges where we can only take steps of say 1/8 or 1/4, which can manifest in choppy visuals. Mitigating these effects is a key challenge in authoring shaders.
 
-Even when we're "not using shaders", Corona itself is, in the form of a texture lookup followed by a pixel plot. The lookup coordinates are implemented as floats on the shader side, and occasionally we will see rather mysterious behaviors arise as a result. Larger textures might exhibit shimmering, for instance, on certain edges or corners, as the numbers grow close to 1 and get rounded; thus the call for wider sprite sheet padding on large textures.
+Even when we're "not using shaders", Solar2D itself is, in the form of a texture lookup followed by a pixel plot. The lookup coordinates are implemented as floats on the shader side, and occasionally we will see rather mysterious behaviors arise as a result. Larger textures might exhibit shimmering, for instance, on certain edges or corners, as the numbers grow close to 1 and get rounded; thus the call for wider sprite sheet padding on large textures.
 
 **TODO** lowp seem to be 10-bit denormals? not sure if worth including
 
@@ -158,9 +167,11 @@ Although the specification's guarantees leave room for the special cases, mobile
 
 ### Links
 
+**TODO** could refer to some of the material in here to amplify the article a bit... or just leave as is?
+
 [What Every Computer Scientist Should Know About Floating-Point Arithmetic](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)
 
-[The Floating-Point Guide](https://floating-point-gui.de)
+[The Floating-Point Guide](https://floating-point-gui.de) **TODO** has many links of its own
 
 [Random ASCII (floating point category)](https://randomascii.wordpress.com/category/floating-point)
 

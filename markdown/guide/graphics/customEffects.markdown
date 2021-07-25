@@ -125,7 +125,7 @@ When using these variables, you need to tell Corona that your shader requires th
 kernel.isTimeDependent = true
 `````
 
-When `isTimeDependent` is defined, Corona will also look for `timeTransform`. If this exists, it must be a table with one of the following as its `func` member: `"modulo"`, `"pingpong"`, `"sine"`. The value of `CoronaTotalTime` within the shader will be the result of any such transformation.
+When `isTimeDependent` is defined, Solar2D will also look for `timeTransform`. If this exists, it must be a table with one of the following as its `func` member: `"modulo"`, `"pingpong"`, `"sine"`. The value of `CoronaTotalTime` within the shader will be the result of any such transformation.
 
 The `"modulo"` transform is computed as `CoronaTotalTime = CoronaTotalTime % range`, where `range` is a positive number that may be supplied in the `timeTransform` table under that same key. By default, `range` is 1.
 
@@ -598,7 +598,7 @@ Branching instructions (`if` conditions) are expensive. When possible, `for` loo
 
 ## Precision Issues
 
-Corona's shaders use [IEEE-754 floats](https://en.wikipedia.org/wiki/IEEE_754) as the underlying representation for numbers.
+Solar2D's shaders use [IEEE-754 floats](https://en.wikipedia.org/wiki/IEEE_754) as the underlying representation for numbers.
 
 In the majority of cases&mdash;the exceptions being irrelevant here&mdash;part of a floating-point number specifies an integer numerator. Let's call this `N`. Our numerator can go from `0` to `D - 1`, where `D` is a fixed power of 2. Together these give us a scale factor `t = N / D` in the range \[0, 1).
 
@@ -614,6 +614,6 @@ For instance, see the ["Qualifiers"](https://www.khronos.org/opengles/sdk/docs/r
 
 Now imagine what this means for time, measured in seconds. At first, we'll be totally fine. But just after the two-minute mark, interpolating between 128 and 256, we can only take steps of (256 - 128) / 1024, or 1/8th of a second. At five minutes we'll proceed in increments of 1/4, and so on. Anything relying on such results becomes quite choppy.
 
-This scenario is gloomier than it needs to be, however. The time is actually maintained in Corona as a single-precision float, with a respectable 23-bit numerator; the loss comes after it makes its way to the GPU. Furthermore, many shaders want transformed results, something like `TrueTotalTime % X` or `sin(N * TrueTotalTime)`, whose absolute values are likely to be in the more precise lower numeric ranges. Time transforms let us do some of the more common possibilities on the Corona side and pass the nicer results along.
+This scenario is gloomier than it needs to be, however. The time is actually maintained in Solar2D as a single-precision float, with a respectable 23-bit numerator; the loss comes after it makes its way to the GPU. Furthermore, many shaders want transformed results, something like `TrueTotalTime % X` or `sin(N * TrueTotalTime)`, whose absolute values are likely to be in the more precise lower numeric ranges. Time transforms let us do some of the more common possibilities on the Corona side and pass the nicer results along.
 
 Further details may be found on the [Numbers in Lua][guide.data.numbersInLua] guide.
