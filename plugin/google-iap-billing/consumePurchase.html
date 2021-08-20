@@ -9,10 +9,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Corona Documentation — Plugins | On-Demand Resources | OnDemandResourcesEvent | errorCode</title>
+  <title>Corona Documentation — Plugins | google-iap-billing | consumePurchase</title>
   <meta name="description" content="Corona lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../css/shCoreDefault.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/shCoreDefault.css" type="text/css" />
 <script src="https://corona-cdn.coronalabs.com/js/docs.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -30,12 +30,12 @@
 	<span class="titleimg" onclick="window.location='https://coronalabs.com/'"></span>
 	<div id="nav">
 		<ul>
-<li><a href="../../../../guide/programming/index.html">Getting Started</a></li>
-<li><a href="../../../../guide/index.html">Guides</a></li>
-<li><a href="../../../../api/index.html">API Reference</a></li>
-<li><a href="../../../../tutorial/index.html">Tutorials</a></li>
-<li><a href="../../../../plugin/index.html">Plugins</a></li>
-<li><a href="../../../../native/index.html">Corona Native</a></li>
+<li><a href="../../guide/programming/index.html">Getting Started</a></li>
+<li><a href="../../guide/index.html">Guides</a></li>
+<li><a href="../../api/index.html">API Reference</a></li>
+<li><a href="../../tutorial/index.html">Tutorials</a></li>
+<li><a href="../../plugin/index.html">Plugins</a></li>
+<li><a href="../../native/index.html">Corona Native</a></li>
 </ul>
 
 		<!--
@@ -54,26 +54,31 @@
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#event.errorcode">event.errorCode</a><ul>
+<li><a href="#store.consumepurchase">store.consumePurchase()</a><ul>
 <li><a href="#overview">Overview</a></li>
+<li><a href="#gotchas">Gotchas</a></li>
+<li><a href="#syntax">Syntax</a><ul>
+<li><a href="#productidentifier-required">productIdentifier <sub><sup>(required)</sup></sub></a></li>
+<li><a href="#transaction-required">transaction <sub><sup>(required)</sup></sub></a></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
 <div id="breadcrumb">
-<a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../../plugin/index.html">Plugins</a>  ▸  <a href="../../../../plugin/onDemandResources/index.html">On-Demand Resources</a>  ▸  <a href="../../../../plugin/onDemandResources/event/OnDemandResourcesEvent/index.html">OnDemandResourcesEvent</a>  ▸  <a href="../../../../plugin/onDemandResources/event/OnDemandResourcesEvent/errorCode.html">errorCode</a>
+<a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../plugin/index.html">Plugins</a>  ▸  <a href="../../plugin/google-iap-billing/index.html">google-iap-billing</a>  ▸  <a href="../../plugin/google-iap-billing/consumePurchase.html">consumePurchase</a>
 </div>
-<div id="event.errorcode" class="section level1">
-<h1>event.errorCode</h1>
+<div id="store.consumepurchase" class="section level1">
+<h1>store.consumePurchase()</h1>
 <blockquote>
 <table>
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Type</strong></td>
-<td align="left"><a href="../../../../api/type/Number.html">Number</a></td>
+<td align="left"><a href="../../api/type/Function.html">Function</a></td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Event</strong></td>
-<td align="left"><a href="../../../../plugin/onDemandResources/event/OnDemandResourcesEvent/index.html">onDemandResourcesEvent</a></td>
+<td align="left"><strong>Return value</strong></td>
+<td align="left">none</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Revision</strong></td>
@@ -81,22 +86,40 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Keywords</strong></td>
-<td align="left">on-demand resources, onDemandResources, onDemandResourcesEvent, errorCode</td>
+<td align="left">Google, IAP, in-app purchases, consumePurchase</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../../plugin/onDemandResources/event/OnDemandResourcesEvent/index.html">onDemandResourcesEvent</a></td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"><a href="../../../../plugin/onDemandResources/index.html">onDemandResources.*</a></td>
+<td align="left"><a href="../../plugin/google-iap-billing/purchase.html">store.purchase()</a></td>
 </tr>
 </tbody>
 </table>
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Number indicating the error code, if any. Use this number to identify specific errors and handle them.</p>
+<p>This function &quot;consumes&quot; purchases and makes the item(s) available for purchase again. In Google IAP, once a product is purchased, it is considered &quot;owned&quot; and it cannot be purchased again. Thus, you must use this function to revert &quot;owned&quot; products to &quot;unowned&quot; products so they become available for purchase again.</p>
+<p>Note that some items are designed to be purchased only once and you should <strong>not</strong> consume them. For example, if a purchase unlocks a new world within a game, it should be ineligible for future consumption. Alternatively, some items can be purchased multiple times, for example energy packs and gems — these type of items must be consumed before they can be purchased again. For further information, please see Google's <a href="http://developer.android.com/google/play/billing/api.html#consume">documentation</a>.</p>
+</div>
+<div id="gotchas" class="section level2">
+<h2>Gotchas</h2>
+<ul>
+<li><p>Consuming purchases is <strong>not</strong> instantaneous. It's recommended that you wait a few minutes after calling <code>store.consumePurchase()</code>, then verify that the consumption actually happened.</p></li>
+<li><p>Consuming products also discards their previous purchase data.</p></li>
+<li><p>When a product is consumed, the transaction state will be <code>&quot;consumed&quot;</code>. There are no callbacks for invalid products.</p></li>
+</ul>
+</div>
+<div id="syntax" class="section level2">
+<h2>Syntax</h2>
+<p>This function has two alternative syntaxes</p>
+<pre class="brush: lua;">store.consumePurchase( productIdentifier )
+store.consumePurchase( transaction )</pre>
+<div id="productidentifier-required" class="section level5">
+<h5>productIdentifier <sub><sup>(required)</sup></sub></h5>
+<p><em><a href="../../api/type/String.html">String</a>.</em> String representing the product identifier of the item to consume.</p>
+</div>
+<div id="transaction-required" class="section level5">
+<h5>transaction <sub><sup>(required)</sup></sub></h5>
+<p><em><a href="../../api/type/Table.html">Table</a>.</em> Table containing data related to the <a href="../../plugin/google-iap-billing/event/storeTransaction/transaction.html">transaction</a> to be consumed.</p>
 <hr>
 <div id="footer">
 <p class="copyright">
@@ -105,7 +128,8 @@
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
 </p>
-<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=plugin.onDemandResources.event.OnDemandResourcesEvent.errorCode&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
+<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=plugin.google-iap-billing.consumePurchase&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
+</div>
 </div>
 </div>
 </div>

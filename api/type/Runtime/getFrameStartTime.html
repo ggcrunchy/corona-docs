@@ -54,18 +54,17 @@
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#runtime.getframestarttime">Runtime.getFrameStartTime()</a><ul>
+<li><a href="#runtimegetframestarttime">Runtime:getFrameStartTime()</a><ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#syntax">Syntax</a></li>
-<li><a href="#example">Example</a></li>
 </ul></li>
 </ul>
 </div>
 <div id="breadcrumb">
 <a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../api/index.html">API Reference</a>  ▸  <a href="../../../api/type/index.html">type</a>  ▸  <a href="../../../api/type/Runtime/index.html">Runtime</a>  ▸  <a href="../../../api/type/Runtime/getFrameStartTime.html">getFrameStartTime</a>
 </div>
-<div id="runtime.getframestarttime" class="section level1">
-<h1>Runtime.getFrameStartTime()</h1>
+<div id="runtimegetframestarttime" class="section level1">
+<h1>Runtime:getFrameStartTime()</h1>
 <blockquote>
 <table>
 <tbody>
@@ -83,7 +82,7 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Return value</strong></td>
-<td align="left"><a href="../../../api/type/Number.html">Number</a></td>
+<td align="left">none</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Revision</strong></td>
@@ -91,30 +90,23 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Keywords</strong></td>
-<td align="left">runtime, getFrameStartTime</td>
+<td align="left">runtime, time</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../api/type/Runtime/getFrameID.html">Runtime.getFrameID()</a>, [time]</td>
+<td align="left"><a href="../../../api/event/enterFrame/time.html">enterFrame.time</a></td>
 </tr>
 </tbody>
 </table>
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Returns the time (in milliseconds) at the start of this frame.</p>
-<p>This is also available as <a href="../../../api/event/enterFrame/time.html">'time'</a> via enterFrame event listener functions.</p>
+<p>Returns the time since the application started, as of the start of this frame.</p>
+<p>This is also available from the <code>enterFrame</code> event's <code>time</code> member.</p>
 </div>
 <div id="syntax" class="section level2">
 <h2>Syntax</h2>
-<pre class="brush: lua;">Runtime.getFrameStartTime( )</pre>
-</div>
-<div id="example" class="section level2">
-<h2>Example</h2>
-<pre class="brush: lua;">function printFrameStartTime( )
-    print (Runtime.getFrameStartTime( )/1000 .. " seconds since app started." )
-end 
-timer.performWithDelay(100, printFrameStartTime)</pre>
+<pre class="brush: lua;">Runtime:getFrameStartTime()</pre>
 <hr>
 <div id="footer">
 <p class="copyright">

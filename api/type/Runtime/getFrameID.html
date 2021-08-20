@@ -54,17 +54,17 @@
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#runtime.getframeid">Runtime.getFrameID()</a><ul>
+<li><a href="#runtimegetframeid">Runtime:getFrameID()</a><ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#example">Example</a></li>
+<li><a href="#syntax">Syntax</a></li>
 </ul></li>
 </ul>
 </div>
 <div id="breadcrumb">
 <a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../api/index.html">API Reference</a>  ▸  <a href="../../../api/type/index.html">type</a>  ▸  <a href="../../../api/type/Runtime/index.html">Runtime</a>  ▸  <a href="../../../api/type/Runtime/getFrameID.html">getFrameID</a>
 </div>
-<div id="runtime.getframeid" class="section level1">
-<h1>Runtime.getFrameID()</h1>
+<div id="runtimegetframeid" class="section level1">
+<h1>Runtime:getFrameID()</h1>
 <blockquote>
 <table>
 <tbody>
@@ -82,7 +82,7 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Return value</strong></td>
-<td align="left"><a href="../../../api/type/Number.html">Number</a></td>
+<td align="left">none</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Revision</strong></td>
@@ -90,33 +90,23 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Keywords</strong></td>
-<td align="left">runtime, getFrameStartTime</td>
+<td align="left">runtime, frame</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../api/type/Runtime/getFrameStartTime.html">Runtime.getFrameStartTime()</a></td>
+<td align="left"><a href="../../../api/event/enterFrame/frame.html">enterFrame.frame</a></td>
 </tr>
 </tbody>
 </table>
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Returns a value that identifies the current frame, say for debugging or to handle at-most-once-per-frame actions.</p>
-<p>This is also available as <a href="../../../api/event/enterFrame/frame.html">'frame'</a> via enterFrame event listener functions.</p>
+<p>Returns a value that identifies the current frame.</p>
+<p>This is also available from the <code>enterFrame</code> event's <code>frame</code> member.</p>
 </div>
-<div id="example" class="section level2">
-<h2>Example</h2>
-<pre class="brush: lua;">local frameID
-function updatePathfinding( ) -- might get called before any of our enterFrame event listener functions
-    local id = Runtime.getFrameID()
-
-    if id ~= frameID then -- frame is new?
-        frameID = id
-        doExpensivePathfinding() -- this might be too expensive to perform twice, or once and then not even use, so we only trigger it on demand
-                                 -- and then reuse the result for the rest of the frame
-    end
-end 
-timer.performWithDelay(100, updatePathfinding)</pre>
+<div id="syntax" class="section level2">
+<h2>Syntax</h2>
+<pre class="brush: lua;">Runtime:getFrameID()</pre>
 <hr>
 <div id="footer">
 <p class="copyright">

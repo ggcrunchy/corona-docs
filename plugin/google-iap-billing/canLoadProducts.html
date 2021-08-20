@@ -9,10 +9,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Corona Documentation — Plugins | On-Demand Resources | OnDemandResourcesEvent</title>
+  <title>Corona Documentation — Plugins | google-iap-billing | canLoadProducts</title>
   <meta name="description" content="Corona lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../css/shCoreDefault.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/shCoreDefault.css" type="text/css" />
 <script src="https://corona-cdn.coronalabs.com/js/docs.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -30,12 +30,12 @@
 	<span class="titleimg" onclick="window.location='https://coronalabs.com/'"></span>
 	<div id="nav">
 		<ul>
-<li><a href="../../../../guide/programming/index.html">Getting Started</a></li>
-<li><a href="../../../../guide/index.html">Guides</a></li>
-<li><a href="../../../../api/index.html">API Reference</a></li>
-<li><a href="../../../../tutorial/index.html">Tutorials</a></li>
-<li><a href="../../../../plugin/index.html">Plugins</a></li>
-<li><a href="../../../../native/index.html">Corona Native</a></li>
+<li><a href="../../guide/programming/index.html">Getting Started</a></li>
+<li><a href="../../guide/index.html">Guides</a></li>
+<li><a href="../../api/index.html">API Reference</a></li>
+<li><a href="../../tutorial/index.html">Tutorials</a></li>
+<li><a href="../../plugin/index.html">Plugins</a></li>
+<li><a href="../../native/index.html">Corona Native</a></li>
 </ul>
 
 		<!--
@@ -54,29 +54,24 @@
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#ondemandresourcesevent">onDemandResourcesEvent</a><ul>
+<li><a href="#store.canloadproducts">store.canLoadProducts</a><ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#properties">Properties</a><ul>
-<li><a href="#event.errorcodeplugin.ondemandresources.event.ondemandresourcesevent.errorcode">[event.errorCode][plugin.onDemandResources.event.onDemandResourcesEvent.errorCode]</a></li>
-<li><a href="#event.iserrorplugin.ondemandresources.event.ondemandresourcesevent.iserror">[event.isError][plugin.onDemandResources.event.onDemandResourcesEvent.isError]</a></li>
-<li><a href="#event.nameplugin.ondemandresources.event.ondemandresourcesevent.name">[event.name][plugin.onDemandResources.event.onDemandResourcesEvent.name]</a></li>
-<li><a href="#event.tagplugin.ondemandresources.event.ondemandresourcesevent.tag">[event.tag][plugin.onDemandResources.event.onDemandResourcesEvent.tag]</a></li>
-<li><a href="#event.typeplugin.ondemandresources.event.ondemandresourcesevent.type">[event.type][plugin.onDemandResources.event.onDemandResourcesEvent.type]</a></li>
-</ul></li>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#example">Example</a></li>
 </ul></li>
 </ul>
 </div>
 <div id="breadcrumb">
-<a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../../plugin/index.html">Plugins</a>  ▸  <a href="../../../../plugin/onDemandResources/index.html">On-Demand Resources</a>  ▸  <a href="../../../../plugin/onDemandResources/event/OnDemandResourcesEvent/index.html">OnDemandResourcesEvent</a>
+<a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../plugin/index.html">Plugins</a>  ▸  <a href="../../plugin/google-iap-billing/index.html">google-iap-billing</a>  ▸  <a href="../../plugin/google-iap-billing/canLoadProducts.html">canLoadProducts</a>
 </div>
-<div id="ondemandresourcesevent" class="section level1">
-<h1>onDemandResourcesEvent</h1>
+<div id="store.canloadproducts" class="section level1">
+<h1>store.canLoadProducts</h1>
 <blockquote>
 <table>
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Type</strong></td>
-<td align="left">[Event][api.type.event]</td>
+<td align="left"><a href="../../api/type/Boolean.html">Boolean</a></td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Revision</strong></td>
@@ -84,43 +79,54 @@
 </tr>
 <tr class="odd">
 <td align="left"><strong>Keywords</strong></td>
-<td align="left">on-demand resources, onDemandResources, onDemandResourcesEvent</td>
+<td align="left">Google, IAP, in-app purchases, canLoadProducts</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../../plugin/onDemandResources/request.html">onDemandResources.request()</a></td>
+<td align="left"><a href="../../plugin/google-iap-billing/loadProducts.html">store.loadProducts()</a></td>
 </tr>
 <tr class="odd">
 <td align="left"></td>
-<td align="left"><a href="../../../../plugin/onDemandResources/setEventListener.html">onDemandResources.setEventListener()</a></td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"><a href="../../../../plugin/onDemandResources/index.html">onDemandResources.*</a></td>
+<td align="left"><a href="../../plugin/google-iap-billing/index.html">store.*</a></td>
 </tr>
 </tbody>
 </table>
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>The following event properties are passed to individual listener functions within <a href="../../../../plugin/onDemandResources/request.html">onDemandResources.request()</a> calls <strong>and</strong> to the listener function specified in <a href="../../../../plugin/onDemandResources/setEventListener.html">onDemandResources.setEventListener()</a>.</p>
+<p>This property will be <code>true</code> if the store supports the loading of products. Following confirmation, the <a href="../../plugin/google-iap-billing/loadProducts.html">store.loadProducts()</a> function can be used to retrieve information about items available for sale.</p>
 </div>
-<div id="properties" class="section level2">
-<h2>Properties</h2>
-<div id="event.errorcodeplugin.ondemandresources.event.ondemandresourcesevent.errorcode" class="section level4">
-<h4>[event.errorCode][plugin.onDemandResources.event.onDemandResourcesEvent.errorCode]</h4>
+<div id="syntax" class="section level2">
+<h2>Syntax</h2>
+<pre class="brush: lua;">store.canLoadProducts</pre>
 </div>
-<div id="event.iserrorplugin.ondemandresources.event.ondemandresourcesevent.iserror" class="section level4">
-<h4>[event.isError][plugin.onDemandResources.event.onDemandResourcesEvent.isError]</h4>
-</div>
-<div id="event.nameplugin.ondemandresources.event.ondemandresourcesevent.name" class="section level4">
-<h4>[event.name][plugin.onDemandResources.event.onDemandResourcesEvent.name]</h4>
-</div>
-<div id="event.tagplugin.ondemandresources.event.ondemandresourcesevent.tag" class="section level4">
-<h4>[event.tag][plugin.onDemandResources.event.onDemandResourcesEvent.tag]</h4>
-</div>
-<div id="event.typeplugin.ondemandresources.event.ondemandresourcesevent.type" class="section level4">
-<h4>[event.type][plugin.onDemandResources.event.onDemandResourcesEvent.type]</h4>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<pre class="brush: lua;">local store = require( "plugin.google.iap.billing" )
+
+-- Transaction listener function
+local function transactionListener( event )
+    local transaction = event.transaction
+end
+
+-- Product listener function
+local function productListener( event )
+    print( "Valid products:", #event.products )
+    print( "Invalid products:", #event.invalidProducts )
+end
+
+-- Initialize Google IAP
+store.init( transactionListener )
+
+-- Sometime later, load products
+if ( store.canLoadProducts ) then
+
+    local productIdentifiers = {
+        "com.coronalabs.ExampleInAppPurchase.Consumable",
+        "com.coronalabs.ExampleInAppPurchase.NonConsumable"
+    }
+    store.loadProducts( productIdentifiers, productListener )
+end</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
@@ -129,8 +135,7 @@
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
 </p>
-<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=plugin.onDemandResources.event.OnDemandResourcesEvent.index&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
-</div>
+<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=plugin.google-iap-billing.canLoadProducts&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
 </div>
 </div>
 </div>

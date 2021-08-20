@@ -86,21 +86,21 @@
 </tr>
 <tr class="odd">
 <td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../api/type/Runtime/getFrameID.html">Runtime.getFrameID()</a></td>
+<td align="left"><a href="../../../api/type/Runtime/getFrameID.html">Runtime:getFrameID()</a></td>
 </tr>
 </tbody>
 </table>
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>The current frame accessible by an enterFrame event listener function (which is called on every frame, until the event listener is removed).</p>
+<p>An ID unique to the current frame of the application accessible by an enterFrame event listener function (which is called on every frame, until the event listener is removed).</p>
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<pre class="brush: lua;">function printFrame( event )
-    print ("Frame id: " .. event.frame )
+<pre class="brush: lua;">local function printCurrentFrameID( event )
+    print ( "Current frame ID: " .. tostring(event.frame) )
 end 
-Runtime:addEventListener("enterFrame", printFrame)</pre>
+Runtime:addEventListener( "enterFrame", printCurrentFrameID )</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
