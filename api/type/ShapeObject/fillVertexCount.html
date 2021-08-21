@@ -54,33 +54,22 @@
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#objectsetfillcolor">object:setFillColor()</a><ul>
+<li><a href="#object.fillvertexcount">object.fillVertexCount</a><ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#syntax">Syntax</a><ul>
-<li><a href="#gray-red-green-blue-alpha-optional">gray, red, green, blue, alpha <sub><sup>(optional)</sup></sub></a></li>
-<li><a href="#gradient-optional">gradient <sub><sup>(optional)</sup></sub></a></li>
-</ul></li>
-<li><a href="#gotchas">Gotchas</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#vector-object-fill">Vector Object Fill</a></li>
-<li><a href="#text-object-fill">Text Object Fill</a></li>
-<li><a href="#gradient-fill">Gradient Fill</a></li>
-<li><a href="#image-tint">Image Tint</a></li>
-</ul></li>
 </ul></li>
 </ul>
 </div>
 <div id="breadcrumb">
 <a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../api/index.html">API Reference</a>  ▸  <a href="../../../api/type/index.html">type</a>  ▸  <a href="../../../api/type/ShapeObject/index.html">ShapeObject</a>  ▸  <a href="../../../api/type/ShapeObject/fillVertexCount.html">fillVertexCount</a>
 </div>
-<div id="objectsetfillcolor" class="section level1">
-<h1>object:setFillColor()</h1>
+<div id="object.fillvertexcount" class="section level1">
+<h1>object.fillVertexCount</h1>
 <blockquote>
 <table>
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Type</strong></td>
-<td align="left"><a href="../../../api/type/Function.html">Function</a></td>
+<td align="left"><a href="../../../api/type/Number.html">Number</a></td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Object</strong></td>
@@ -100,11 +89,19 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Keywords</strong></td>
-<td align="left">setFillColor, color, fill, vector</td>
+<td align="left">setFillVertexColor, vertex count, fill</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../api/type/ShapeObject/setStrokeColor.html">object:setStrokeColor()</a></td>
+<td align="left"><strong>See also</strong> [</td>
+<td align="left">object.fill]<a href="../../../api/type/ShapeObject/fill.html">api.type.ShapeObject.fill</a></td>
+</tr>
+<tr class="even">
+<td align="left">[object:setFillVertexC</td>
+<td align="left">olor()]<a href="../../../api/type/ShapeObject/setFillVertexColor.html">api.type.ShapeObject.setFillVertexColor</a></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"><a href="../../../api/type/ShapeObject/strokeVertexCount.html">object.strokeVertexCount</a></td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -131,61 +128,7 @@
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Sets the fill color of vector and text objects. Also applies a tint to image objects.</p>
-</div>
-<div id="syntax" class="section level2">
-<h2>Syntax</h2>
-<pre class="brush: lua;">object:setFillColor( gray )
-object:setFillColor( gray, alpha )
-object:setFillColor( red, green, blue )
-object:setFillColor( red, green, blue, alpha )
-object:setFillColor( gradient )</pre>
-<div id="gray-red-green-blue-alpha-optional" class="section level5">
-<h5>gray, red, green, blue, alpha <sub><sup>(optional)</sup></sub></h5>
-<p><em><a href="../../../api/type/Number.html">Numbers</a>.</em> Numbers between <code>0</code> and <code>1</code> that represent the corresponding value for that channel. <code>alpha</code> represents the opacity of the fill color/tint.</p>
-</div>
-<div id="gradient-optional" class="section level5">
-<h5>gradient <sub><sup>(optional)</sup></sub></h5>
-<p><em><a href="../../../api/type/Table.html">Table</a></em>. See the gradient fill example below.</p>
-</div>
-</div>
-<div id="gotchas" class="section level2">
-<h2>Gotchas</h2>
-<p>If you are passing a table of color values to this function, the table must be <a href="../../../api/library/global/unpack.html">unpacked</a> so that the color values are dictated properly:</p>
-<pre class="brush: lua;">local myText = display.newText( "hello", 0, 0, native.systemFontBold, 12 )
-
-local colorTable = { 1, 0, 0, 0.5 }
-myText:setFillColor( unpack(colorTable) )</pre>
-</div>
-<div id="examples" class="section level2">
-<h2>Examples</h2>
-<div id="vector-object-fill" class="section level5">
-<h5>Vector Object Fill</h5>
-<pre class="brush: lua;">local vertices = { 0,-110, 27,-35, 105,-35, 43,16, 65,90, 0,45, -65,90, -43,15, -105,-35, -27,-35 }
-
-local star = display.newPolygon( 300, 300, vertices )
-star:setFillColor( 1, 0.2, 0.2 )</pre>
-</div>
-<div id="text-object-fill" class="section level5">
-<h5>Text Object Fill</h5>
-<pre class="brush: lua;">local myText = display.newText( "hello", 0, 0, native.systemFontBold, 12 )
-
-myText:setFillColor( 1, 0.2, 0.2 )</pre>
-</div>
-<div id="gradient-fill" class="section level5">
-<h5>Gradient Fill</h5>
-<pre class="brush: lua;">local rect = display.newRect( 0, 0, 100, 200 )
-
-local gradient = {
-    type="gradient",
-    color1={ 1, 1, 1 }, color2={ 0.8, 0.8, 0.8 }, direction="down"
-}
-rect:setFillColor( gradient )</pre>
-</div>
-<div id="image-tint" class="section level5">
-<h5>Image Tint</h5>
-<pre class="brush: lua;">local image = display.newImage( "image.png" )
-image:setFillColor( 0.72, 0.9, 0.16, 0.78 )  -- Tints image green</pre>
+<p>Solar2D objects with a <code>fill</code> property have some geometry underlying the associated visual details, consisting of this many vertices.</p>
 <hr>
 <div id="footer">
 <p class="copyright">
@@ -195,7 +138,6 @@ image:setFillColor( 0.72, 0.9, 0.16, 0.78 )  -- Tints image green</pre>
 Help us help you! If you notice a problem with this page, please report it.
 </p>
 <p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=api.type.ShapeObject.fillVertexCount&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
-</div>
 </div>
 </div>
 </div>

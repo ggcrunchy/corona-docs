@@ -54,27 +54,22 @@
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#objectsetfillcolor">object:setFillColor()</a><ul>
+<li><a href="#objectsetstrokevertexcolor">object:setStrokeVertexColor()</a><ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#syntax">Syntax</a><ul>
+<li><a href="#index-required">index <sub><sup>(required)</sup></sub></a></li>
 <li><a href="#gray-red-green-blue-alpha-optional">gray, red, green, blue, alpha <sub><sup>(optional)</sup></sub></a></li>
-<li><a href="#gradient-optional">gradient <sub><sup>(optional)</sup></sub></a></li>
 </ul></li>
 <li><a href="#gotchas">Gotchas</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#vector-object-fill">Vector Object Fill</a></li>
-<li><a href="#text-object-fill">Text Object Fill</a></li>
-<li><a href="#gradient-fill">Gradient Fill</a></li>
-<li><a href="#image-tint">Image Tint</a></li>
-</ul></li>
+<li><a href="#examples">Examples</a></li>
 </ul></li>
 </ul>
 </div>
 <div id="breadcrumb">
 <a href="https://docs.coronalabs.com">Documentation</a>  ▸  <a href="../../../api/index.html">API Reference</a>  ▸  <a href="../../../api/type/index.html">type</a>  ▸  <a href="../../../api/type/ShapeObject/index.html">ShapeObject</a>  ▸  <a href="../../../api/type/ShapeObject/setStrokeVertexColor.html">setStrokeVertexColor</a>
 </div>
-<div id="objectsetfillcolor" class="section level1">
-<h1>object:setFillColor()</h1>
+<div id="objectsetstrokevertexcolor" class="section level1">
+<h1>object:setStrokeVertexColor()</h1>
 <blockquote>
 <table>
 <tbody>
@@ -100,11 +95,11 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Keywords</strong></td>
-<td align="left">setFillColor, color, fill, vector</td>
+<td align="left">setStrokeVertexColor, vertex color, stroke, vector</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>See also</strong></td>
-<td align="left"><a href="../../../api/type/ShapeObject/setStrokeColor.html">object:setStrokeColor()</a></td>
+<td align="left">[object:setFillVertexColor()][api.type.ShapeObject.setFillStrokeColor]</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -131,61 +126,34 @@
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Sets the fill color of vector and text objects. Also applies a tint to image objects.</p>
+<p>Sets the color of a particular stroke vertex in vector objects.</p>
+<p>Until a given stroke vertex color has been assigned, it is interpreted as white. The color of the object at each vertex is a combination of its stroke color and stroke vertex color: the two red values multiplied together produce the final red, and so on for the remaining channels. When the object is drawn, the resulting colors are interpolated between neighboring vertices.</p>
+<p>The first time this is called on an object, some extra memory will be allocated to it to store the colors.</p>
 </div>
 <div id="syntax" class="section level2">
 <h2>Syntax</h2>
-<pre class="brush: lua;">object:setFillColor( gray )
-object:setFillColor( gray, alpha )
-object:setFillColor( red, green, blue )
-object:setFillColor( red, green, blue, alpha )
-object:setFillColor( gradient )</pre>
+<pre class="brush: lua;">object:setStrokeVertexColor( index, gray )
+object:setStrokeVertexColor( index, gray, alpha )
+object:setStrokeVertexColor( index, red, green, blue )
+object:setStrokeVertexColor( index, red, green, blue, alpha )</pre>
+<div id="index-required" class="section level5">
+<h5>index <sub><sup>(required)</sup></sub></h5>
+<p><em><a href="../../../api/type/Number.html">Numbers</a></em> Integer from 1 to <a href="../../../api/type/ShapeObject/strokeVertexCount.html">object.strokeVertexCount</a> indicating which stroke vertex to color.</p>
+</div>
 <div id="gray-red-green-blue-alpha-optional" class="section level5">
 <h5>gray, red, green, blue, alpha <sub><sup>(optional)</sup></sub></h5>
-<p><em><a href="../../../api/type/Number.html">Numbers</a>.</em> Numbers between <code>0</code> and <code>1</code> that represent the corresponding value for that channel. <code>alpha</code> represents the opacity of the fill color/tint.</p>
-</div>
-<div id="gradient-optional" class="section level5">
-<h5>gradient <sub><sup>(optional)</sup></sub></h5>
-<p><em><a href="../../../api/type/Table.html">Table</a></em>. See the gradient fill example below.</p>
+<p><em><a href="../../../api/type/Number.html">Numbers</a>.</em> Numbers between <code>0</code> and <code>1</code> that represent the corresponding value for that channel. <code>alpha</code> represents the opacity of the stroke color/tint.</p>
 </div>
 </div>
 <div id="gotchas" class="section level2">
 <h2>Gotchas</h2>
 <p>If you are passing a table of color values to this function, the table must be <a href="../../../api/library/global/unpack.html">unpacked</a> so that the color values are dictated properly:</p>
-<pre class="brush: lua;">local myText = display.newText( "hello", 0, 0, native.systemFontBold, 12 )
-
-local colorTable = { 1, 0, 0, 0.5 }
-myText:setFillColor( unpack(colorTable) )</pre>
+<p>``````lualocal rect = display.newRect( 150, 150, 100, 100 )</p>
+<p>local colorTable = { 1, 0, 0, 0.5 } rect:setStrokeVertexColor( 2, unpack(colorTable) ) ``````</p>
 </div>
 <div id="examples" class="section level2">
 <h2>Examples</h2>
-<div id="vector-object-fill" class="section level5">
-<h5>Vector Object Fill</h5>
-<pre class="brush: lua;">local vertices = { 0,-110, 27,-35, 105,-35, 43,16, 65,90, 0,45, -65,90, -43,15, -105,-35, -27,-35 }
-
-local star = display.newPolygon( 300, 300, vertices )
-star:setFillColor( 1, 0.2, 0.2 )</pre>
-</div>
-<div id="text-object-fill" class="section level5">
-<h5>Text Object Fill</h5>
-<pre class="brush: lua;">local myText = display.newText( "hello", 0, 0, native.systemFontBold, 12 )
-
-myText:setFillColor( 1, 0.2, 0.2 )</pre>
-</div>
-<div id="gradient-fill" class="section level5">
-<h5>Gradient Fill</h5>
-<pre class="brush: lua;">local rect = display.newRect( 0, 0, 100, 200 )
-
-local gradient = {
-    type="gradient",
-    color1={ 1, 1, 1 }, color2={ 0.8, 0.8, 0.8 }, direction="down"
-}
-rect:setFillColor( gradient )</pre>
-</div>
-<div id="image-tint" class="section level5">
-<h5>Image Tint</h5>
-<pre class="brush: lua;">local image = display.newImage( "image.png" )
-image:setFillColor( 0.72, 0.9, 0.16, 0.78 )  -- Tints image green</pre>
+<p><code>lualocal rect = display.newRect( 150, 150, 100, 100 ) rect:setFillColor( 1, 1, 0.8 )  rect:setStrokeVertexColor( 1, 1, 0, 0 ) -- index = 1; r, g, b = (1, 0, 0) rect.strokeWidth = 8</code></p>
 <hr>
 <div id="footer">
 <p class="copyright">
@@ -195,7 +163,6 @@ image:setFillColor( 0.72, 0.9, 0.16, 0.78 )  -- Tints image green</pre>
 Help us help you! If you notice a problem with this page, please report it.
 </p>
 <p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=api.type.ShapeObject.setStrokeVertexColor&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
-</div>
 </div>
 </div>
 </div>
