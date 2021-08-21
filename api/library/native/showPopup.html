@@ -9,8 +9,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Corona Documentation — API Reference | Libraries | native | showPopup</title>
-  <meta name="description" content="Corona lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
+  <title>Solar2D Documentation — API Reference | Libraries | native | showPopup</title>
+  <meta name="description" content="Solar2D lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
   <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
   <link rel="stylesheet" href="../../../css/shCoreDefault.css" type="text/css" />
 <script src="https://corona-cdn.coronalabs.com/js/docs.js"></script>
@@ -27,7 +27,7 @@
 <body>
 <div class="header"></div>
 <div class="title">
-	<span class="titleimg" onclick="window.location='https://coronalabs.com/'"></span>
+	<span class="titleimg" onclick="window.location='https://docs.coronalabs.com/'"></span>
 	<div id="nav">
 		<ul>
 <li><a href="../../../guide/programming/index.html">Getting Started</a></li>
@@ -35,7 +35,8 @@
 <li><a href="../../../api/index.html">API Reference</a></li>
 <li><a href="../../../tutorial/index.html">Tutorials</a></li>
 <li><a href="../../../plugin/index.html">Plugins</a></li>
-<li><a href="../../../native/index.html">Corona Native</a></li>
+<li><a href="../../../native/index.html">Solar2D Native</a></li>
+<li><a href="../../../coronacards/index.html">CoronaCards</a></li>
 </ul>
 
 		<!--
@@ -104,7 +105,7 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Revision</strong></td>
-<td align="left"><a href="https://coronalabs.com/links/docs/current-corona-sdk">Current Public Release (2018.3326)</a></td>
+<td align="left"><a href="https://solar2d.com/download/">Release 2021.3646</a></td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Keywords</strong></td>
@@ -172,8 +173,8 @@ native.showPopup( name, options )</pre>
 <ul>
 <li><code>iOSAppId</code> — <a href="../../../api/type/String.html">String</a> ID assigned to the app by the iTunes App Store.</li>
 <li><code>tvOSAppId</code> — <a href="../../../api/type/String.html">String</a> If specified, this will be used on tvOS instead of <code>iOSAppId</code>.</li>
-<li><code>androidAppPackageName</code> — <a href="../../../api/type/String.html">String</a> indicating the unique package name of the Android app to be displayed by the Google Play or Amazon app stores. This property is optional. If you do not provide a package name, Corona will use the currently running app's package name by default. You should only set this if you want to display the app store details of another app.</li>
-<li><code>supportedAndroidStores</code> — <a href="../../../api/type/Array.html">Array</a> of strings indicating which app stores are supported on Android. This is needed in case the app was not installed by an app store so that Corona knows which app store to display the popup from. This is especially needed while testing and debugging the app. Currently, string names of <code>&quot;amazon&quot;</code> and <code>&quot;google&quot;</code> are supported.</li>
+<li><code>androidAppPackageName</code> — <a href="../../../api/type/String.html">String</a> indicating the unique package name of the Android app to be displayed by the Google Play or Amazon app stores. This property is optional. If you do not provide a package name, Solar2D will use the currently running app's package name by default. You should only set this if you want to display the app store details of another app.</li>
+<li><code>supportedAndroidStores</code> — <a href="../../../api/type/Array.html">Array</a> of strings indicating which app stores are supported on Android. This is needed in case the app was not installed by an app store so that Solar2D knows which app store to display the popup from. This is especially needed while testing and debugging the app. Currently, string names of <code>&quot;amazon&quot;</code> and <code>&quot;google&quot;</code> are supported.</li>
 </ul>
 <p><a id="requestAppPermission"></a></p>
 </div>
@@ -183,18 +184,18 @@ native.showPopup( name, options )</pre>
 <ul>
 <li><p><code>appPermission</code> — Single <a href="../../../api/type/String.html">string</a> or an <a href="../../../api/type/Array.html">array</a> of strings where each string is an app permission to request. Valid options include the following <nobr>platform-agnostic</nobr> types:</p>
 <ul>
-<li><p><code>&quot;BodySensors&quot;</code> — Corresponds to the <code>SENSORS</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html">permission group</a> on Android. Only available on Android devices running version 4.4W and above. <!--Corresponds to the "Motion and Fitness" privacy setting on iOS.--></p></li>
-<li><p><code>&quot;Calendars&quot;</code> — Corresponds to the <code>CALENDAR</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#CALENDAR">permission group</a> on Android.</p></li>
-<li><p><code>&quot;Camera&quot;</code> — Corresponds to the <code>CAMERA</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#CAMERA">permission group</a> on Android.</p></li>
-<li><p><code>&quot;Contacts&quot;</code> — Corresponds to the <code>CONTACTS</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#CONTACTS">permission group</a> on Android.</p></li>
-<li><p><code>&quot;Location&quot;</code> — Corresponds to the <code>LOCATION</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#LOCATION">permission group</a> on Android.</p></li>
-<li><p><code>&quot;Microphone&quot;</code> — Corresponds to the <code>MICROPHONE</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#MICROPHONE">permission group</a> on Android.</p></li>
-<li><p><code>&quot;Phone&quot;</code> — Corresponds to the <code>PHONE</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#PHONE">permission group</a> on Android.</p></li>
-<li><p><code>&quot;SMS&quot;</code> — Corresponds to the <code>SMS</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#SMS">permission group</a> on Android.</p></li>
-<li><p><code>&quot;Storage&quot;</code> — Corresponds to the <code>STORAGE</code> <a href="http://developer.android.com/reference/android/Manifest.permission_group.html#STORAGE">permission group</a> on Android.</p></li>
+<li><p><code>&quot;BodySensors&quot;</code> — Corresponds to the <code>SENSORS</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group">permission group</a> on Android. Only available on Android devices running version 4.4W and above. <!--Corresponds to the "Motion and Fitness" privacy setting on iOS.--></p></li>
+<li><p><code>&quot;Calendars&quot;</code> — Corresponds to the <code>CALENDAR</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#CALENDAR">permission group</a> on Android.</p></li>
+<li><p><code>&quot;Camera&quot;</code> — Corresponds to the <code>CAMERA</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#CAMERA">permission group</a> on Android.</p></li>
+<li><p><code>&quot;Contacts&quot;</code> — Corresponds to the <code>CONTACTS</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#CONTACTS">permission group</a> on Android.</p></li>
+<li><p><code>&quot;Location&quot;</code> — Corresponds to the <code>LOCATION</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#LOCATION">permission group</a> on Android.</p></li>
+<li><p><code>&quot;Microphone&quot;</code> — Corresponds to the <code>MICROPHONE</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#MICROPHONE">permission group</a> on Android.</p></li>
+<li><p><code>&quot;Phone&quot;</code> — Corresponds to the <code>PHONE</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#PHONE">permission group</a> on Android.</p></li>
+<li><p><code>&quot;SMS&quot;</code> — Corresponds to the <code>SMS</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#SMS">permission group</a> on Android.</p></li>
+<li><p><code>&quot;Storage&quot;</code> — Corresponds to the <code>STORAGE</code> <a href="https://developer.android.com/reference/android/Manifest.permission_group#STORAGE">permission group</a> on Android.</p></li>
 </ul>
-<p>On Android, this can also be the name of anything in the <code>usesPermissions</code> table of <code>build.settings</code>, such as <code>&quot;android.permission.READ_SMS&quot;</code> or <code>&quot;com.android.voicemail.permission.ADD_VOICEMAIL&quot;</code>. The full name of an Android <a href="http://developer.android.com/reference/android/Manifest.permission_group.html">permission group</a> such as <code>&quot;android.permission-group.STORAGE&quot;</code> or <code>&quot;android.permission-group.PHONE&quot;</code> is also valid.</p>
-<p>To properly use app permissions on Android, you'll need to add <strong>at least one</strong> of the Android permissions corresponding to a <nobr>platform-agnostic</nobr> type to the <code>usesPermissions</code> table of <code>build.settings</code>. See <strong>Table 1</strong> of Android's <a href="http://developer.android.com/guide/topics/security/permissions.html#permission-groups">dangerous permission group documentation</a> for more information on which Android permissions correspond with which <nobr>platform-agnostic</nobr> types.</p></li>
+<p>On Android, this can also be the name of anything in the <code>usesPermissions</code> table of <code>build.settings</code>, such as <code>&quot;android.permission.READ_SMS&quot;</code> or <code>&quot;com.android.voicemail.permission.ADD_VOICEMAIL&quot;</code>. The full name of an Android <a href="https://developer.android.com/reference/android/Manifest.permission_group">permission group</a> such as <code>&quot;android.permission-group.STORAGE&quot;</code> or <code>&quot;android.permission-group.PHONE&quot;</code> is also valid.</p>
+<p>To properly use app permissions on Android, you'll need to add <strong>at least one</strong> of the Android permissions corresponding to a <nobr>platform-agnostic</nobr> type to the <code>usesPermissions</code> table of <code>build.settings</code>. See <strong>Table 1</strong> of Android's <a href="https://developer.android.com/guide/topics/permissions/overview#permission-groups">dangerous permission group documentation</a> for more information on which Android permissions correspond with which <nobr>platform-agnostic</nobr> types.</p></li>
 <li><p><code>urgency</code> — <a href="../../../api/type/String.html">String</a> representing how urgent this permission request is to running the app. Must be one of the following values:</p>
 <ul>
 <li><p><code>&quot;Low&quot;</code> — This is the default urgency level. It indicates that something minor is dependent on the app permission, but most features of the app can be experienced without this permission. These requests simply ask for the permission and, if the request is denied, no additional effort is made to change the user's decision. For example, the <code>&quot;Location&quot;</code> permission is not a mandatory aspect of using the camera.</p></li>
@@ -333,12 +334,12 @@ native.showPopup( "requestAppPermission", options )</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
-© 2020 Corona Labs Inc. All Rights Reserved.
+© 2021 Solar2D All Rights Reserved.
 </p>
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
 </p>
-<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=api.library.native.showPopup&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
+<p><a class="feedback-button" href="https://github.com/coronalabs/corona-docs/issues" target="_blank">Report an Issue</a></p>
 </div>
 </div>
 </div>

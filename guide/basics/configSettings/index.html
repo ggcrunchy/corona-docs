@@ -9,8 +9,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Corona Documentation — Developer Guides | Basics</title>
-  <meta name="description" content="Corona lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
+  <title>Solar2D Documentation — Developer Guides | Basics</title>
+  <meta name="description" content="Solar2D lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
   <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
   <link rel="stylesheet" href="../../../css/shCoreDefault.css" type="text/css" />
 <script src="https://corona-cdn.coronalabs.com/js/docs.js"></script>
@@ -27,7 +27,7 @@
 <body>
 <div class="header"></div>
 <div class="title">
-	<span class="titleimg" onclick="window.location='https://coronalabs.com/'"></span>
+	<span class="titleimg" onclick="window.location='https://docs.coronalabs.com/'"></span>
 	<div id="nav">
 		<ul>
 <li><a href="../../../guide/programming/index.html">Getting Started</a></li>
@@ -35,7 +35,8 @@
 <li><a href="../../../api/index.html">API Reference</a></li>
 <li><a href="../../../tutorial/index.html">Tutorials</a></li>
 <li><a href="../../../plugin/index.html">Plugins</a></li>
-<li><a href="../../../native/index.html">Corona Native</a></li>
+<li><a href="../../../native/index.html">Solar2D Native</a></li>
+<li><a href="../../../coronacards/index.html">CoronaCards</a></li>
 </ul>
 
 		<!--
@@ -226,7 +227,11 @@ Important
 }</pre>
 <p>As indicated, each <strong>image suffix</strong> must be specified within brackets and quotes as in <code>[&quot;@2x&quot;]</code>. The suffix can be named whatever you want, but it should be short and logical since you must append the same suffix to <strong>all</strong> image files designed for that image set. When adding a suffix to each image file, do not include the bracket or quotes — just append the suffix itself, for example <code>myImage@2x.png</code> or <code>myImage@4x.png</code>.</p>
 <p>The second part of each declaration is the <strong>scale factor</strong>. This value specifies the scale threshold above which Corona will use images in that suffix set. The following code can help you determine the proper values:</p>
-<pre class="brush: lua;">print( display.pixelWidth / display.actualContentWidth )</pre>
+<pre class="brush: lua;">-- For if your app is in portrait orientation:
+print( display.pixelWidth / display.actualContentWidth )
+
+-- For if your app is in landscape orientation:
+print( display.pixelWidth / display.actualContentHeight )</pre>
 <p>Add this code to your project, access the Corona Simulator, and use <strong>Window → View As</strong> to simulate different devices. Note the output in the Corona Simulator Console — this is the scale factor for the device. If the value on a particular device is <strong>greater than</strong> or <strong>equal to</strong> the number you specify for the scale factor, Corona will use images from that suffix set.</p>
 <div class="guide-notebox-imp">
 <div class="notebox-title-imp">
@@ -394,12 +399,12 @@ application =
 <hr>
 <div id="footer">
 <p class="copyright">
-© 2020 Corona Labs Inc. All Rights Reserved.
+© 2021 Solar2D All Rights Reserved.
 </p>
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
 </p>
-<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=guide.basics.configSettings.index&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
+<p><a class="feedback-button" href="https://github.com/coronalabs/corona-docs/issues" target="_blank">Report an Issue</a></p>
 </div>
 </div>
 </div>

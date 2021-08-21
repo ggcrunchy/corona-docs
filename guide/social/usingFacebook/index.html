@@ -9,8 +9,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Corona Documentation — Developer Guides | Communication/Social</title>
-  <meta name="description" content="Corona lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
+  <title>Solar2D Documentation — Developer Guides | Communication/Social</title>
+  <meta name="description" content="Solar2D lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
   <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
   <link rel="stylesheet" href="../../../css/shCoreDefault.css" type="text/css" />
 <script src="https://corona-cdn.coronalabs.com/js/docs.js"></script>
@@ -27,7 +27,7 @@
 <body>
 <div class="header"></div>
 <div class="title">
-	<span class="titleimg" onclick="window.location='https://coronalabs.com/'"></span>
+	<span class="titleimg" onclick="window.location='https://docs.coronalabs.com/'"></span>
 	<div id="nav">
 		<ul>
 <li><a href="../../../guide/programming/index.html">Getting Started</a></li>
@@ -35,7 +35,8 @@
 <li><a href="../../../api/index.html">API Reference</a></li>
 <li><a href="../../../tutorial/index.html">Tutorials</a></li>
 <li><a href="../../../plugin/index.html">Plugins</a></li>
-<li><a href="../../../native/index.html">Corona Native</a></li>
+<li><a href="../../../native/index.html">Solar2D Native</a></li>
+<li><a href="../../../coronacards/index.html">CoronaCards</a></li>
 </ul>
 
 		<!--
@@ -231,7 +232,7 @@ Note
 </div>
 <div id="logging-inout" class="section level2">
 <h2>Logging In/Out</h2>
-<p>Logging in to Facebook is accomplished through <a href="../../../plugin/facebook-v4a/login.html">facebook.login()</a>. If you didn't already set a [listener][api.Type.Listener] function via <a href="../../../plugin/facebook-v4a/init.html">facebook.init()</a> or <a href="../../../plugin/facebook-v4a/setFBConnectListener.html">facebook.setFBConnectListener()</a>, you can set it by passing the listener reference as the first argument to <a href="../../../plugin/facebook-v4a/login.html">facebook.login()</a>.</p>
+<p>Logging in to Facebook is accomplished through <a href="../../../plugin/facebook-v4a/login.html">facebook.login()</a>. If you didn't already set a <a href="../../../api/type/Listener.html">listener</a> function via <a href="../../../plugin/facebook-v4a/init.html">facebook.init()</a> or <a href="../../../plugin/facebook-v4a/setFBConnectListener.html">facebook.setFBConnectListener()</a>, you can set it by passing the listener reference as the first argument to <a href="../../../plugin/facebook-v4a/login.html">facebook.login()</a>.</p>
 <p>Secondly, via <a href="../../../plugin/facebook-v4a/login.html">facebook.login()</a>, you can request an array of <a href="https://developers.facebook.com/docs/facebook-login/permissions">permissions</a>. Both <nobr><strong>read-only</strong></nobr> and <strong>publishable</strong> permissions can be specified, with some caveats which are outlined in the <a href="../../../plugin/facebook-v4a/login.html">facebook.login()</a> documentation.</p>
 <p>Putting these two aspects together, a login call might look like this:</p>
 <pre class="brush: lua;">facebook.login( facebookListener, { "email", "user_birthday" } )</pre>
@@ -279,7 +280,7 @@ end</pre>
 <p>To upload a photo to your Facebook photo album, the <code>params</code> table can be filled in based on the standard Graph API parameters found <a href="https://developers.facebook.com/docs/graph-api/reference/photo#Creating">here</a>:</p>
 <pre class="brush: lua;">local attachment = {
     caption = "Corona icon file",
-    url = "http://www.coronalabs.com/links/demo/Corona90x90.png",
+    url = "https://coronalabs.com/wordpress/wp-content/uploads/2020/04/Solar2D-App-Icon-RGB-512.png",
 }
 facebook.request( "me/photos", "POST", attachment )</pre>
 <p>When <a href="../../../plugin/facebook-v4a/request.html">facebook.request()</a> calls complete, your Facebook listener function will be called with an <code>event.type</code> of <code>&quot;request&quot;</code>. Facebook generally returns your data as <code>event.response</code>, a <nobr>JSON-encoded</nobr> table of data. To convert this into a Lua table, call <a href="../../../api/library/json/decode.html">json.decode()</a>, remembering to first <code>require()</code> the JSON library.</p>
@@ -321,12 +322,12 @@ facebook.request( "me/photos", "POST", attachment )</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
-© 2020 Corona Labs Inc. All Rights Reserved.
+© 2021 Solar2D All Rights Reserved.
 </p>
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
 </p>
-<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=guide.social.usingFacebook.index&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
+<p><a class="feedback-button" href="https://github.com/coronalabs/corona-docs/issues" target="_blank">Report an Issue</a></p>
 </div>
 </div>
 </div>

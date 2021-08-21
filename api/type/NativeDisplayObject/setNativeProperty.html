@@ -9,8 +9,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Corona Documentation — API Reference | type | NativeDisplayObject | setNativeProperty</title>
-  <meta name="description" content="Corona lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
+  <title>Solar2D Documentation — API Reference | type | NativeDisplayObject | setNativeProperty</title>
+  <meta name="description" content="Solar2D lets you build games/apps for all major platforms including iOS, Android, Kindle, Apple TV, Android TV, macOS, and Windows. Get the free toolset!" />
   <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
   <link rel="stylesheet" href="../../../css/shCoreDefault.css" type="text/css" />
 <script src="https://corona-cdn.coronalabs.com/js/docs.js"></script>
@@ -27,7 +27,7 @@
 <body>
 <div class="header"></div>
 <div class="title">
-	<span class="titleimg" onclick="window.location='https://coronalabs.com/'"></span>
+	<span class="titleimg" onclick="window.location='https://docs.coronalabs.com/'"></span>
 	<div id="nav">
 		<ul>
 <li><a href="../../../guide/programming/index.html">Getting Started</a></li>
@@ -35,7 +35,8 @@
 <li><a href="../../../api/index.html">API Reference</a></li>
 <li><a href="../../../tutorial/index.html">Tutorials</a></li>
 <li><a href="../../../plugin/index.html">Plugins</a></li>
-<li><a href="../../../native/index.html">Corona Native</a></li>
+<li><a href="../../../native/index.html">Solar2D Native</a></li>
+<li><a href="../../../coronacards/index.html">CoronaCards</a></li>
 </ul>
 
 		<!--
@@ -56,7 +57,6 @@
 <ul>
 <li><a href="#objectsetnativeproperty">object:setNativeProperty()</a><ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#gotchas">Gotchas</a></li>
 <li><a href="#syntax">Syntax</a><ul>
 <li><a href="#property-required">property <sub><sup>(required)</sup></sub></a></li>
 <li><a href="#value-required">value <sub><sup>(required)</sup></sub></a></li>
@@ -91,7 +91,7 @@
 </tr>
 <tr class="odd">
 <td align="left"><strong>Revision</strong></td>
-<td align="left"><a href="https://coronalabs.com/links/docs/current-corona-sdk">Current Public Release (2018.3326)</a></td>
+<td align="left"><a href="https://solar2d.com/download/">Release 2021.3646</a></td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Keywords</strong></td>
@@ -106,11 +106,7 @@
 </blockquote>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>This function allows you to <strong>set</strong> properties of the underlying native object created by the <a href="../../../api/library/native/index.html">native</a> library. For example, if you create a <a href="../../../api/type/WebView/index.html">WebView</a> on iOS, you can set the Obj-C properties of the corresponding <code>UIWebView</code>.</p>
-</div>
-<div id="gotchas" class="section level2">
-<h2>Gotchas</h2>
-<p>This is an iOS-only feature.</p>
+<p>This function allows you to <strong>set</strong> properties of the underlying native object created by the <a href="../../../api/library/native/index.html">native</a> library. For example, if you create a <a href="../../../api/type/WebView/index.html">WebView</a> on iOS, you can set the Obj-C properties of the corresponding <a href="https://developer.apple.com/documentation/webkit/wkwebview?language=objc"><code>WKWebView</code></a> or <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration?language=objc"><code>WKWebViewConfiguration</code></a> if called before a request is made. Similarly on Android it can set properties of <a href="https://developer.android.com/reference/android/webkit/WebView"><code>WebView</code></a> or <a href="https://developer.android.com/reference/android/webkit/WebSettings"><code>WebSettings</code></a></p>
 </div>
 <div id="syntax" class="section level2">
 <h2>Syntax</h2>
@@ -121,22 +117,29 @@
 </div>
 <div id="value-required" class="section level5">
 <h5>value <sub><sup>(required)</sup></sub></h5>
-<p>The value to set the property to. Must be a Lua value compatible with <nobr>Obj-C</nobr>. The following Lua values are converted to the corresponding values in <nobr>Obj-C</nobr>: <a href="../../../api/type/Boolean.html">boolean</a>, <a href="../../../api/type/String.html">string</a>, <a href="../../../api/type/Array.html">array</a>, <a href="../../../api/type/Table.html">table</a>, and <a href="../../../api/type/Number.html">number</a>.</p>
+<p>The value to set the property to. Must be a Lua value compatible with <nobr>Obj-C</nobr> or Java. The following Lua values are converted to the corresponding values in <nobr>Obj-C</nobr>: <a href="../../../api/type/Boolean.html">boolean</a>, <a href="../../../api/type/String.html">string</a>, <a href="../../../api/type/Array.html">array</a>, <a href="../../../api/type/Table.html">table</a>, and <a href="../../../api/type/Number.html">number</a>. Java supported types are <a href="../../../api/type/Boolean.html">boolean</a>, <a href="../../../api/type/String.html">string</a> and <a href="../../../api/type/Number.html">number</a>.</p>
+<p>Android also supports special pair of values for WebView: property <code>&quot;http.agent&quot;</code> and value <code>&quot;system&quot;</code> to set WebView user agent to system default.</p>
 </div>
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
 <pre class="brush: lua;">local webView = native.newWebView( 0, 0, display.contentWidth, display.contentHeight )
-webView:setNativeProperty( "allowsInlineMediaPlayback", true )</pre>
+if system.getInfo("platform") == "android" then
+    webView:setNativeProperty("http.agent", "system")
+    webView:setNativeProperty("setBuiltInZoomControls", false)
+else
+    webView:setNativeProperty( "allowsInlineMediaPlayback", true )
+end
+webView:request( "https://www.solar2d.com" )</pre>
 <hr>
 <div id="footer">
 <p class="copyright">
-© 2020 Corona Labs Inc. All Rights Reserved.
+© 2021 Solar2D All Rights Reserved.
 </p>
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
 </p>
-<p><a class="feedback-button" href="https://coronalabs.com/corona-docs-feedback-form/?page=api.type.NativeDisplayObject.setNativeProperty&Current+Public+Release+%282018%2E3326%29" target="_blank">Report an Issue</a></p>
+<p><a class="feedback-button" href="https://github.com/coronalabs/corona-docs/issues" target="_blank">Report an Issue</a></p>
 </div>
 </div>
 </div>
