@@ -69,6 +69,7 @@
 <li><a href="#facebook.requestplugin.facebook-v4a.request"><a href="../../plugin/facebook-v4a/request.html">facebook.request()</a></a></li>
 <li><a href="#facebook.setfbconnectlistenerplugin.facebook-v4a.setfbconnectlistener"><a href="../../plugin/facebook-v4a/setFBConnectListener.html">facebook.setFBConnectListener()</a></a></li>
 <li><a href="#facebook.showdialogplugin.facebook-v4a.showdialog"><a href="../../plugin/facebook-v4a/showDialog.html">facebook.showDialog()</a></a></li>
+<li><a href="#facebook.logeventplugin.facebook-v4a.logevent"><a href="../../plugin/facebook-v4a/logEvent.html">facebook.logEvent()</a></a></li>
 </ul></li>
 <li><a href="#properties">Properties</a><ul>
 <li><a href="#facebook.isactiveplugin.facebook-v4a.isactive"><a href="../../plugin/facebook-v4a/isActive.html">facebook.isActive</a></a></li>
@@ -102,7 +103,7 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Revision</strong></td>
-<td align="left"><a href="https://solar2d.com/download/">Release 2021.3646</a></td>
+<td align="left"><a href="https://solar2d.com/download/">Release 2022.3683</a></td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Keywords</strong></td>
@@ -131,6 +132,7 @@
 </div>
 <div class="docs-tip-inner-right">
 <p>This documentation is for the Facebook <strong>v4a</strong> plugin, an updated version of the <a href="../../plugin/facebook-v4/index.html">v4</a> plugin. This updated version is asynchronous and includes a new <a href="../../plugin/facebook-v4a/init.html">facebook.init()</a> API which gives you a chance to define a specific function that will be called when initialization completes.</p>
+<p>Facebook now requires you to include a Client Token from your App Page (Under App Settings&gt;Advanced&gt;Security), <nobr>(see <a href="#settings">Project Settings</a> for where to put the Token)</nobr></p>
 <p>To utilize this version, you should update your <code>build.settings</code> to include <code>&quot;plugin.facebook.v4a&quot;</code> <nobr>(see <a href="#settings">Project Settings</a>)</nobr>, require <code>&quot;plugin.facebook.v4a&quot;</code> in all Lua modules which use Facebook <nobr>(see <a href="#syntax">Syntax</a>)</nobr>, and integrate <a href="../../plugin/facebook-v4a/init.html">facebook.init()</a> into your existing project code.</p>
 </div>
 </div>
@@ -145,7 +147,7 @@ Important
 </div>
 <!---
 
-## Changes / Updates 
+## Changes / Updates
 
 The Facebook platform evolves very quickly and changes frequently. Because of this, the Facebook plugin must also evolve, and sometimes these changes will alter the behavior of your apps. Consult our [Facebook Versioning/Upgrading][plugin.facebook-v4a.fbUpgrade] guide for more info on moving between different versions of the Facebook plugin.
 
@@ -188,6 +190,9 @@ The Facebook platform evolves very quickly and changes frequently. Because of th
 <div id="facebook.showdialogplugin.facebook-v4a.showdialog" class="section level4">
 <h4><a href="../../plugin/facebook-v4a/showDialog.html">facebook.showDialog()</a></h4>
 </div>
+<div id="facebook.logeventplugin.facebook-v4a.logevent" class="section level4">
+<h4><a href="../../plugin/facebook-v4a/logEvent.html">facebook.logEvent()</a></h4>
+</div>
 </div>
 <div id="properties" class="section level2">
 <h2>Properties</h2>
@@ -227,12 +232,12 @@ The Facebook platform evolves very quickly and changes frequently. Because of th
     {
         plist =
         {
-            UIApplicationExitsOnSuspend = false,
             FacebookAppID = "XXXXXXXXXX",  -- Replace XXXXXXXXXX with your Facebook App ID
             CFBundleURLTypes =
             {
                 { CFBundleURLSchemes = { "fbXXXXXXXXXX", } }  -- Replace XXXXXXXXXX with your Facebook App ID
             },
+            FacebookClientToken = "YYYYYYYYYYYYYY",  -- Replace YYYYYYYYYYYYYY with your Facebook Client Token
             -- Whitelist Facebook apps
             LSApplicationQueriesSchemes =
             {
@@ -247,8 +252,8 @@ The Facebook platform evolves very quickly and changes frequently. Because of th
 }</pre>
 <p>Notice that there are several critical parts which must be specified:</p>
 <ul>
-<li><p><code>UIApplicationExitsOnSuspend</code> — To ensure that Facebook can resume your app properly, you must include <code>UIApplicationExitsOnSuspend = false</code>. If you've set this parameter to <code>true</code> for some other reason, you must revert it to <code>false</code> (default).</p></li>
 <li><p><code>FacebookAppID</code> — Set this key to <code>FacebookAppID = &quot;XXXXXXXXXX&quot;</code> and replace <code>XXXXXXXXXX</code> with your unique Facebook App ID.</p></li>
+<li><p><code>FacebookClientToken</code> — Set this key to <code>FacebookClientToken = &quot;YYYYYYYYYYYYYY&quot;</code> and replace <code>YYYYYYYYYYYYYY</code> with your unique Facebook Client Token.</p></li>
 <li><p><code>CFBundleURLTypes</code> — The <code>CFBundleURLTypes</code> table must be declared exactly as shown and it must include a table named <code>CFBundleURLSchemes</code>. Inside this, include your Facebook App ID and prefix it with <code>fb</code>. Thus, if your App ID is <strong>1234567890</strong>, you should specify: <code>&quot;fb1234567890&quot;</code>.</p></li>
 <li><p><code>LSApplicationQueriesSchemes</code> — This table of whitelisted URL schemes ensures that your app and the Facebook SDK run properly together.</p></li>
 </ul>
@@ -256,7 +261,7 @@ The Facebook platform evolves very quickly and changes frequently. Because of th
 <div id="android" class="section level3">
 <h3>Android</h3>
 <p>If your app is for Android, you must also include a <nobr>Facebook App ID</nobr> in <code>build.settings</code>:</p>
-<pre class="brush: lua;">settings = 
+<pre class="brush: lua;">settings =
 {
     android =
     {
@@ -268,7 +273,10 @@ The Facebook platform evolves very quickly and changes frequently. Because of th
                 &lt;provider android:authorities="com.facebook.app.FacebookContentProviderXXXXXXXXXX"
                           android:name="com.facebook.FacebookContentProvider" android:exported="true"/>
             ]],
-        }, -- Replace XXXXXXXXXX with your Facebook App ID
+                        [[
+                &lt;meta-data android:name="com.facebook.sdk.ClientToken" android:value="YYYYYYYYYYYYYYYYYYYYY"/>
+            ]],
+        }, -- Replace XXXXXXXXXX with your Facebook App ID and YYYYYYYYYYYYYYYYYYYYY with Facebook Client Token
     },
 }</pre>
 <div class="guide-notebox">
@@ -295,11 +303,12 @@ Note
 <li><p><code>libfacebook.a</code></p></li>
 </ul>
 <p>In addition, you'll need to add several properties to your <code>Info.plist</code>. Open the file in an external text editor and add the following XML code into it:</p>
-<pre class="brush: xml;">&lt;key>UIApplicationExitsOnSuspend&lt;/key>
-&lt;false/>
-&lt;key>FacebookAppID&lt;/key>
+<pre class="brush: xml;">&lt;key>FacebookAppID&lt;/key>
 &lt;!-- Replace XXXXXXXXXX with your Facebook App ID -->
 &lt;string>XXXXXXXXXX&lt;/string>
+&lt;key>FacebookClientToken&lt;/key>
+&lt;!-- Replace YYYYYYYYYYYYYYYYYYYYY with your Facebook Client Token -->
+&lt;string>YYYYYYYYYYYYYYYYYYYYY&lt;/string>
 &lt;key>CFBundleURLTypes&lt;/key>
 &lt;array>
     &lt;dict>
@@ -346,11 +355,13 @@ Note
 <pre class="brush: xml;">&lt;uses-permission android:name="android.permission.INTERNET"/></pre>
 </div>
 <ol start="3" style="list-style-type: decimal">
-<li>In the <code>application</code> element of your <code>AndroidManifest.xml</code>, add a <nobr><code>meta-data</code></nobr> tag containing your Facebook App ID.</li>
+<li>In the <code>application</code> element of your <code>AndroidManifest.xml</code>, add a <nobr><code>meta-data</code></nobr> tag containing your Facebook App ID and Facebook Client Token.</li>
 </ol>
 <div class="code-indent">
 <pre class="brush: xml;">&lt;!-- Replace XXXXXXXXXX with your Facebook App ID -->
-&lt;meta-data android:name="com.facebook.sdk.ApplicationId" android:value="\ XXXXXXXXXX"/></pre>
+&lt;meta-data android:name="com.facebook.sdk.ApplicationId" android:value="\ XXXXXXXXXX"/>
+&lt;!-- Replace XXXXXXXXXX with your Facebook ClientToken-->
+&lt;meta-data android:name="com.facebook.sdk.ClientToken" android:value="\ XXXXXXXXXX"/></pre>
 <div class="guide-notebox">
 <div class="notebox-title">
 Note
@@ -380,7 +391,7 @@ Note
         android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 &lt;activity android:name="plugin.facebook.v4a.FacebookFragmentActivity"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         android:configChanges="keyboardHidden|screenSize|orientation"/></pre>
 </div>
 <ol start="6" style="list-style-type: decimal">
@@ -407,7 +418,7 @@ Important
 <hr>
 <div id="footer">
 <p class="copyright">
-© 2021 Solar2D All Rights Reserved.
+© 2020-2023 Solar2D All Rights Reserved.
 </p>
 <p class="feedback">
 Help us help you! If you notice a problem with this page, please report it.
