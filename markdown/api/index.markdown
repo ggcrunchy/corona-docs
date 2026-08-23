@@ -16,7 +16,7 @@
 </div>
 
 [linkAPIZip]: https://github.com/coronalabs/corona-docs/archive/gh-pages.zip
-[linkDailyBuild]: http://developer.coronalabs.com/downloads/daily-builds
+[linkDailyBuild]: https://github.com/coronalabs/corona/releases
 
 ## [Libraries][api.library]
 
@@ -304,6 +304,8 @@
 
 <p class="index">[graphics.defineEffect()][api.library.graphics.defineEffect]</p>
 
+<p class="index">[graphics.defineVertexExtension()][api.library.graphics.defineVertexExtension]</p>
+
 <p class="index">[graphics.getFontMetrics()][api.library.graphics.getFontMetrics]</p>
 
 <p class="index">[graphics.newImageSheet()][api.library.graphics.newImageSheet]</p>
@@ -315,6 +317,8 @@
 <p class="index">[graphics.newTexture()][api.library.graphics.newTexture]</p>
 
 <p class="index">[graphics.releaseTextures()][api.library.graphics.releaseTextures]</p>
+
+<p class="index">[graphics.undefineEffect()][api.library.graphics.undefineEffect]</p>
 
 
 #### [io.*][api.library.io]
@@ -809,6 +813,8 @@
 
 <p class="index">[transition.ignoreEmptyReference][api.library.transition.ignoreEmptyReference]</p>
 
+<p class="index">[transition.loop()][api.library.transition.loop]</p>
+
 <p class="index">[transition.moveBy()][api.library.transition.moveBy]</p>
 
 <p class="index">[transition.moveTo()][api.library.transition.moveTo]</p>
@@ -977,6 +983,8 @@
 
 
 #### [enterFrame][api.event.enterFrame]
+
+<p class="index">[event.frame][api.event.enterFrame.frame]</p>
 
 <p class="index">[event.name][api.event.enterFrame.name]</p>
 
@@ -1439,12 +1447,6 @@
 
 <p class="index">[event.url][api.event.system.url]</p>
 
-#### [windowState][api.event.windowState]
-
-<p class="index">[event.name][api.event.windowState.name]</p>
-
-<p class="index">[event.phase][api.event.windowState.phase]</p>
-
 
 #### [tap][api.event.tap]
 
@@ -1533,6 +1535,13 @@
 <p class="index">[event.name][api.event.video.name]</p>
 
 <p class="index">[event.phase][api.event.video.phase]</p>
+
+
+#### [windowState][api.event.windowState]
+
+<p class="index">[event.name][api.event.windowState.name]</p>
+
+<p class="index">[event.phase][api.event.windowState.phase]</p>
 
 
 ## [Types][api.type]
@@ -1953,6 +1962,10 @@
 
 <p class="index">[object:append()][api.type.LineObject.append]</p>
 
+<p class="index">[extendedData][api.type.LineObject.extendedData]</p>
+
+<p class="index">[strokeExtension][api.type.LineObject.strokeExtension]</p>
+
 
 #### [Listener][api.type.Listener]
 
@@ -2060,6 +2073,21 @@
 
 #### [Path][api.type.Path]
 
+<p class="index">[path.textureBounds][api.type.Path.textureBounds]</p>
+
+<p class="index">[path.textureVertices][api.type.Path.textureVertices]</p>
+
+<p class="index">[path.type][api.type.Path.type]</p>
+
+
+#### [PathExtension][api.type.PathExtension]
+
+<p class="index">[pathExtension:getAttributeDetails()][api.type.PathExtension.getAttributeDetails]</p>
+
+<p class="index">[PathExtension.instances][api.type.PathExtension.instances]</p>
+
+<p class="index">[pathExtension:setAttributeValue()][api.type.PathExtension.setAttributeValue]</p>
+
 
 #### [PhysicsContact][api.type.PhysicsContact]
 
@@ -2109,6 +2137,10 @@
 
 #### [Runtime][api.type.Runtime]
 
+<p class="index">[Runtime:getFrameID()][api.type.Runtime.getFrameID]</p>
+
+<p class="index">[Runtime:getFrameStartTime()][api.type.Runtime.getFrameStartTime]</p>
+
 <p class="index">[Runtime:hasEventSource()][api.type.Runtime.hasEventSource]</p>
 
 <p class="index">[Runtime:hideErrorAlerts()][api.type.Runtime.hideErrorAlerts]</p>
@@ -2133,6 +2165,8 @@
 
 <p class="index">[object:setScrollWidth()][api.type.ScrollViewWidget.setScrollWidth]</p>
 
+<p class="index">[object:setSize()][api.type.ScrollViewWidget.setSize]</p>
+
 <p class="index">[object:takeFocus()][api.type.ScrollViewWidget.takeFocus]</p>
 
 
@@ -2149,13 +2183,29 @@
 
 <p class="index">[object.fill][api.type.ShapeObject.fill]</p>
 
+<p class="index">[fillExtendedData][api.type.ShapeObject.fillExtendedData]</p>
+
+<p class="index">[fillExtension][api.type.ShapeObject.fillExtension]</p>
+
+<p class="index">[object.fillVertexCount][api.type.ShapeObject.fillVertexCount]</p>
+
 <p class="index">[object.path][api.type.ShapeObject.path]</p>
 
 <p class="index">[object:setFillColor()][api.type.ShapeObject.setFillColor]</p>
 
+<p class="index">[object:setFillVertexColor()][api.type.ShapeObject.setFillVertexColor]</p>
+
 <p class="index">[object:setStrokeColor()][api.type.ShapeObject.setStrokeColor]</p>
 
+<p class="index">[object:setStrokeVertexColor()][api.type.ShapeObject.setStrokeVertexColor]</p>
+
 <p class="index">[object.stroke][api.type.ShapeObject.stroke]</p>
+
+<p class="index">[strokeExtendedData][api.type.ShapeObject.strokeExtendedData]</p>
+
+<p class="index">[strokeExtension][api.type.ShapeObject.strokeExtension]</p>
+
+<p class="index">[object.strokeVertexCount][api.type.ShapeObject.strokeVertexCount]</p>
 
 <p class="index">[object.strokeWidth][api.type.ShapeObject.strokeWidth]</p>
 
@@ -2212,6 +2262,8 @@
 <p class="index">[object:setSequence()][api.type.SpriteObject.setSequence]</p>
 
 <p class="index">[object.timeScale][api.type.SpriteObject.timeScale]</p>
+
+<p class="index">[object:useFrameForAnchors()][api.type.SpriteObject.useFrameForAnchors]</p>
 
 
 #### [StageObject][api.type.StageObject]
@@ -2387,6 +2439,19 @@
 <p class="index">[texture:setBackground()][api.type.TextureResourceCanvas.setBackground]</p>
 
 <p class="index">[texture.width][api.type.TextureResourceCanvas.width]</p>
+
+
+#### [TextureResourceCapture][api.type.TextureResourceCapture]
+
+<p class="index">[texture.height][api.type.TextureResourceCapture.height]</p>
+
+<p class="index">[texture:newCaptureEvent()][api.type.TextureResourceCapture.newCaptureEvent]</p>
+
+<p class="index">[texture.pixelHeight][api.type.TextureResourceCapture.pixelHeight]</p>
+
+<p class="index">[texture.pixelWidth][api.type.TextureResourceCapture.pixelWidth]</p>
+
+<p class="index">[texture.width][api.type.TextureResourceCapture.width]</p>
 
 
 #### [TextureResourceExternal][api.type.TextureResourceExternal]

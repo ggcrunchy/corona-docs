@@ -80,6 +80,7 @@ local canvasTexture = graphics.newTexture( { type="canvas", width=128, height=12
     When an object is drawn to the canvas, its "red" results are used and the remaining components are ignored. A red value of 0 produces a black pixel and a value of 1 a white pixel. Intermediate values lead to the corresponding shades of gray.
 
     (**GOTCHA**: This is only confirmed to work on Windows and Android. Other platforms might still need minor fixes.)
+    (**TODO** Probably okay now...)
 
 <div class="code-indent">
 
@@ -89,6 +90,15 @@ local maskCanvasTexture = graphics.newTexture( { type="maskCanvas", width=128, h
 
 </div>
 
+* `"capture"` &mdash; Creates a [TextureResource][api.type.TextureResource] object of type [TextureResourceCapture][api.type.TextureResourceCapture]. This texture resource allows GPU-side windows to be sampled, so that their current contents may be used by images and effects.
+
+<div class="code-indent">
+
+``````lua
+local captureTexture = graphics.newTexture( { type="capture", width=128, height=128 } )
+``````
+
+</div>
 
 
 ##### filename ~^(required)^~

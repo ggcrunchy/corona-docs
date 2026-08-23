@@ -115,6 +115,8 @@ A color key specifies which default color value to set.
 * `"cameraSource"` — The default behavior for a camera object fill is to use the back-facing camera. Setting this value to `"front"`, will change the behavior to use the <nobr>front-facing</nobr> camera. Note that this is an <nobr>iOS-only</nobr> feature.
 
 
+(**TODO**) Same as getDefault
+
 ## Examples
 
 ##### Default Anchors

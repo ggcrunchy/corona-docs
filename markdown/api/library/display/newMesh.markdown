@@ -57,6 +57,8 @@ _[Boolean][api.type.Boolean]._ Convenience parameter with default of `false`. If
 ##### uvs ~^(optional)^~
 _[Array][api.type.Array]._ An array of __u__ and __v__ texture coordinates of vertices forming the mesh. If omitted or invalid, UVs will be automatically assigned based on normalized `vertices` values. Texture coordinates are normalized coordinates where `0,0` is the <nobr>top-left</nobr> corner of the image and `1,1` is the <nobr>bottom-right</nobr> corner of the image.
 
+##### hasZ ~^(optional)^~
+_[Boolean][api.type.Boolean]._ If this is true, `vertices` also expects __z__ coordinates (in the order __x__, __y__, __z__). Without some work (**TODO** link) the __z__ coordinates are merely data and do not affect the mesh's normal interaction with the display hierarchy.
 
 <a id="modes"></a>
 
@@ -108,6 +110,10 @@ Sets the vertex with index `index` to coordinates `x` and `y`:
 
 	object.path:setVertex( index, x, y )
 
+If `hasZ` was provided above, the `z` coordinate may also be updated:
+
+	object.path:setVertex( index, x, y, z )
+
 ##### object.path:getVertex()
 Returns two [numbers][api.type.Number] corresponding to a vertex's coordinates:
 
@@ -138,6 +144,9 @@ Note that a vertex with coordinates `x` and `y` will have world coordinates of <
 mesh:translate( mesh.path:getVertexOffset() )
 ``````
 
+##### object.path:getLowestIndex()
+(**TODO**)
+
 ##### object.path:update()
 Updates the mesh’s `vertices`, `uvs` and `indices`:
 
@@ -158,6 +167,8 @@ local options = {
 mesh.path:update( options )
 ``````
 
+(**TODO** memory policy)
+(**TODO** lowestIndex, narrowIndexedRanges, fillVertexColors)
 
 ## Examples
 

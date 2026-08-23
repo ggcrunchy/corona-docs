@@ -21,7 +21,7 @@ The local origin is at the center of the polygon and the [anchor point][guide.gr
 
 ## Syntax
 
-	display.newPolygon( [parent,] x, y, vertices )
+	display.newPolygon( [parent,] x, y, vertices [, hasZ] )
 
 
 ##### parent ~^(optional)^~
@@ -32,6 +32,9 @@ _[Numbers][api.type.Number]._ The location of the object relative to its parent.
 
 ##### vertices ~^(required)^~
 _[Array][api.type.Array]._ An array of __x__ and __y__ coordinates. These coordinates will automatically be re-centered about the center of the polygon.
+
+##### hasZ ~^(optional)^~
+_[Boolean][api.type.Boolean]._ If this is true, `vertices` also expects __z__ coordinates (in the order __x__, __y__, __z__). Without some work (**TODO** link) the __z__ coordinates are merely data and do not affect the polygon's normal interaction with the display hierarchy.
 
 
 ## Gotchas

@@ -69,6 +69,10 @@ Solar2D. This is `false` by default.
 * `"textureWrapY"` &mdash; The texture wrap mode along the __y__ direction. Values include `"clampToEdge"`, `"repeat"`, or `"mirroredRepeat"`.
 
 
+(**TODO**) emitterScaling, timeTransform, skipsCulling, skipsHitTest, enableDepth, depthClearValue
+(**TODO**) depth notes, regarding setup
+(**TODO**) fix: emitterScaling -> emitterMapping
+
 <a id="examples"></a>
 
 ## Examples

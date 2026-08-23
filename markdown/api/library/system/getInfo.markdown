@@ -247,6 +247,47 @@ Density			 DPI
 
 `"maxVertexTextureUnits"` returns the number of samplers that may be used in vertex shaders on this device. See __Vertex&nbsp;Textures__ in the  [Custom Shader Effects][guide.graphics.customEffects] guide.
 
+### graphicsBackend
+
+Currently, returns either "glBackend" (some flavor of OpenGL) or "vulkanBackend" (Vulkan). (**TODO** link)
+
+#### maxUniformVectorsCount
+
+`"maxUniformVectorsCount"` returns the number of `vec4` uniforms available for custom use in a vertex kernel. This is a "safe" count, so probably undercounts slightly. (It is difficult at best to determine
+ahead of time what built-in uniforms the shader compiler will link; it is pessimistically assumed that all of them get brought in.)
+
+#### maxVertexAttributes
+
+`"maxVertexAttributes"` returns the number of custom attributes available to a [vertex extension][api.library.graphics.defineVertexExtension].
+
+#### instancingSupport
+
+`"instancingSupport"` returns `false` if instancing is unsupported by the hardware.
+
+Otherwise, it return a table of the form `{ vertexReplication = “multiInstance” / “singleInstance” / “none”, hasInstanceID = boolean }`, indicating
+what may be used in [vertex extensions][api.library.graphics.defineVertexExtension].
+
+If `hasInstanceID` is `true`, a vertex kernel can read the current instance's ID, starting from 0.
+
+If `vertexReplication` is not `"none"`, instance-rate attribute streams are available.
+
+Otherwise, a set of vertices will be replicated (during rendering) for each member of the instance-rate stream (or rather the union of these streams).
+
+For example, a rect object might have four corners (**UL**, **UR**, **LL**, **LR**) with vertex-rate data: position, color, etc. If also has an
+instanced "shininess" attribute, and a two-element stream of these: `.2, .7`.
+
+A normal draw would just render the four corners. However, the presence of an instance-rate stream means replicating the corners for each element:
+`(**UL**, .2), (**UR**, .2), (**LL**, .2), (**LR**, .2), (**UL**, .7), (**UR**, .7), (**LL**, .7), (**LR**, .7)`.
+
+In the `"singleInstance"` case, the situation is as described so far. With `"multiInstance"`, a given attribute will repeat some number of times. For
+example, if "shininess was had a count of 2, there would implicitly be four-element stream: `.2, .2, .7, .7`, with corresponding draw behavior. While
+not actually useful in the example, it does have some power when different streams have separate repeat counts.
+
+Importantly, replication and IDs are orthogonal concepts, and the approach will differ depending on what features happen to be available. Both _might_
+be supported, say on desktop, but possibly it ends up being one or the other.
+
+(**TODO** some of this belongs in the vertex extension material)
+
 ### GL_VENDOR
 
 `"GL_VENDOR"` returns the company responsible for the GL implementation on this device. See [here](https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glGetString.xml) for details.
