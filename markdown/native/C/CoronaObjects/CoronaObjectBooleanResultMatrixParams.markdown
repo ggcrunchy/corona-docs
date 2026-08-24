@@ -10,13 +10,15 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectBooleanResultMatrixParams
- 
- Implements the [EarlyOutableIgnorableMethodParams][native.C.CoronaObjects.EarlyOutableIgnorableMethodParams] interface.
- 
- These are method params related to matrix inputs and boolean outputs, whose functions have
- signature `method( const CoronaDisplayObject * self, void * userData, const float matrix[6], int * result )`.
-*/
+These params implement the [EarlyOutableIgnorableMethodParams][native.C.CoronaObjects.EarlyOutableIgnorableMethodParams], and
+pertain to matrix-based operations on a display object, available through a [handle][native.C.PublicTypes].
+
+The bookends have signature:
+
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, const float matrix[6], int * result )`
+``````
+
+with `*result` defaulting to 0; its value after each call is interpreted as a boolean result.

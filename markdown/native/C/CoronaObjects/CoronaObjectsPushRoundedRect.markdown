@@ -5,6 +5,7 @@
 > __Keywords__			CORONA_NATIVE_PRODUCT, C, CoronaGraphics.h, CoronaObjectsPushRoundedRect
 > __See also__			[CoronaObjects.h][native.C.CoronaObjects]
 >						[Corona C Functions][native.C]
+>                       [display.newRoundedRect][api.library.display.newRoundedRect]
 > --------------------- ------------------------------------------------------------------------------------------
 
 
@@ -12,7 +13,7 @@
 
 WIP WIP WIP
 
-[display.newEmitter][api.library.display.newEmitter]
+(**TODO** consider deprecating, per comments in CoronaObjectParams)
 
 /**
  This behaves like `display.newRoundedRect()` but allows method customization.

@@ -10,12 +10,15 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectDidInsertParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+(**TODO** ) inconsistent naming: should be "Group" rather than "Object"...
 
- These are method params related to insertions, whose functions have signature `method( CoronaGroupObject * self, void * userData, int childParentChanged )`.
-*/
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to post-insert operations on a display group, available through a [handle][native.C.PublicTypes].
+
+The bookends have signature:
+
+``````c
+void (*method)( CoronaGroupObject * self, void * userData, int childParentChanged )`
+``````

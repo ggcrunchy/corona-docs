@@ -19,3 +19,6 @@ WIP WIP WIP
 
  These are method params related to draw opportunities, whose functions have signature `method( const CoronaDisplayObject * self, void * userData, const CoronaRenderer * renderer )`.
 */
+
+(**TODO**) before and after allow component writers, raw draws
+(**TODO**) group

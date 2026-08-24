@@ -10,12 +10,13 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaGroupBasicParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to operations on a display group, available through a [handle][native.C.PublicTypes].
 
- This is for the most basic group method params, whose functions have signature `method( CoronaGroupObject * self, void * userData )`.
-*/
+The bookends have signature:
+
+``````c
+void (*method)( CoronaGroupObject * self, void * userData )`
+``````

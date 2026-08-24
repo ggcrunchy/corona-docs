@@ -10,46 +10,38 @@
 
 ## Overview
 
+WIP WIP WIPEE
 
-(**TODO** bookend)
+These params are used to augment and / or override assignment to a display object property in Lua, e.g `object.x = value` with key `"x"`.
+It may be used to provide useful side effects on custom properties, as well as either suppress or piggyback on assignment to existing ones.
 
-WIP WIP WIP
+(**TODO** examples)
 
-/**
- CoronaObjectSetValueParams
- 
- 
- typedef struct CoronaObjectSetValueParams {
-    CoronaObjectParamsHeader header;
-    CoronaObjectSetValueBookend before, after;
-    int ignoreOriginal, disallowEarlyOut, separateScopes;
+## Syntax
+
+``````c
+typedef struct CoronaObjectSetValueParams {
+	CoronaObjectParamsHeader header;
+	CoronaObjectSetValueBookend before, after;
+	int ignoreOriginal, disallowEarlyOut, separateScopes;
 } CoronaObjectSetValueParams;
- 
- This may be used to augment and/or override the `SetValue` method. When `before` logic
- is provided, setting a value, might rule out any meaningful follow-up behavior, so early-outs
- are available.
+``````
 
- This can take on the form:
- 
- ```
-   bool result = false
-   if before then
-     result = before( ..., result )
-     if CanEarlyOut( result ) then
-      return result
-     end
-   end
-   result = original( ..., result );
-   result = after( ..., result );
- ```
- 
- where all three functions take the same arguments.
+These params implement most of the [EarlyOutableIgnorableMethodParams][native.C.CoronaObjects.EarlyOutableIgnorableMethodParams] interface for
+Lua-side property-setting on a display object, available through a [handle][native.C.PublicTypes].
 
- At the moment, the `CanEarlyOut` predicate is "result is true": a value was assigned.
- It is also possible to suppress early-outs by setting `disallowEarlyOut`.
+As opposed to the full interface, the early-out predicate is always "result is true".
 
- The `before` and `after` functions may be NULL, in which case the respective function is
- not called. Similarly, the stock behavior is skipped if `ignoreOriginal` is non-0.
- 
- Its functions have signature `method( const CoronaDisplayObject * self, void * userData, lua_State * L, const char key[], int valueIndex, int * result )`.
-*/
+The only novelty beyond the interface is this property:
+
+##### disallowEarlyOut
+If non-0, early-outs are avoided.
+
+The bookends have signature:
+
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, lua_State * L, const char key[], int valueIndex, int * result )`
+``````
+
+with `*result` defaulting to 0; its value after each call is interpreted as a boolean result, with non-0 meant to indicate that a result
+was assigned. (**TODO** this might actually currently need to be 1?)

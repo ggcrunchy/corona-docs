@@ -10,12 +10,13 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectMatrixParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to matrix-based operations on a display object, available through a [handle][native.C.PublicTypes].
 
- These are method params that provide an input/output matrix, whose functions have signature `method( const CoronaDisplayObject * self, void * userData, float matrix[6] )`.
-*/
+The bookends have signature:
+
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, float matrix[6] )
+``````

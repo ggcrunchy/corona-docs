@@ -12,6 +12,10 @@
 
 WIP WIP WIP
 
+(**TODO** consider deprecating, per comments in CoronaObjectParams)
+
+[display.newText][api.library.display.newText]
+
 int CoronaObjectsPushContainer( lua_State * L, void * userData, const CoronaObjectParams * params );
 
 /**

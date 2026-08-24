@@ -14,15 +14,15 @@ WIP WIP WIPEE
 
 A params struct following this interface may be used to augment and / or override a built-in display object method.
 
-The call takes on the following form:
+The call takes on the following form, in pseudo-code:
  
-``````c
-before( ... )
+``````lua
+before( self, userData, ... )
 original( ... )
-after( ... )
+after( self, userData, ... )
 ``````
  
-where all three functions take the same arguments.
+where the `...` are any arguments common to all three functions.
 
 Any / all of these function calls may be omitted, as described below.
 
@@ -40,7 +40,7 @@ typedef struct
 ``````
 
 The names `IgnorableMethodParams_TYPE` and `IgnorableMethodParamsBookend_FUNC` are placeholders for the actual struct implementing this interface, and
-its corresponding bookend functions with a specific function pointer signature.
+its corresponding bookend functions&mdash;the name refers to them being called on each side of the original&mdash;with a specific function pointer signature.
 
 ##### header  ~^(required)^~
 [Header][native.C.CoronaObjects.CoronaObjectParamsHeader] common to all params structs, used to stitch them into the list used to [build a method stream][native.C.CoronaObjects.CoronaObjectsBuildMethodStream].

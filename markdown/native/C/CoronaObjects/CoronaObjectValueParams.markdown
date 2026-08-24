@@ -10,47 +10,36 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-(**TODO** bookend)
+These params are used to augment and / or override retrieval of a display object property in Lua, e.g `object.x` with key `"x"`.
+It may be used to provide custom properties, as well as either suppress or reinterpret existing ones.
 
-/**
- CoronaObjectValueParams
+(**TODO** examples)
 
+## Syntax
+
+``````c
 typedef struct CoronaObjectValueParams {
     CoronaObjectParamsHeader header;
     CoronaObjectValueBookend before, after;
     int ignoreOriginal, disallowEarlyOut, earlyOutIfZero, separateScopes;
 } CoronaObjectValueParams;
+``````
 
- This may be used to augment and/or override the `Value` method. When `before` logic is
- provided, getting a result (or alternatively, not getting one) might rule out any meaningful
- follow-up behavior, so early-outs are available.
+These params implement the [EarlyOutableIgnorableMethodParams][native.C.CoronaObjects.EarlyOutableIgnorableMethodParams] interface for
+Lua-side property-getting on a display object, available through a [handle][native.C.PublicTypes].
 
- This can take on the form:
- 
- ```
-   local result = 0
-   if before then
-     result = before( ..., result )
-     if CanEarlyOut( result ) then
-      return result
-     end
-   end
-   result = result + original( ..., result );
-   result = after( ..., result );
- ```
- 
- where all three functions take the same arguments.
+The only novelty beyond the interface is this property:
 
- At the moment, the `CanEarlyOut` predicate is either "result is 0" ( `earlyOutIfZero`), or
- "result is non-0". It is also possible to suppress early-outs by setting `disallowEarlyOut`.
+##### disallowEarlyOut
+If non-0, early-outs are avoided.
 
- The `before` and `after` functions may be NULL, in which case the respective function is
- not called. Similarly, the stock behavior is skipped if `ignoreOriginal` is non-0.
+The bookends have signature:
 
- Although only the top value on the stack will actually be used as the ultimate value, the
- intermediate results can be accumulated, say to concatenate multiple values at the end.
- 
- Its functions have signature `method( const CoronaDisplayObject * self, void * userData, lua_State * L, const char key[], int * result )`.
-*/
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, lua_State * L, const char key[], int * result )`
+``````
+
+with `*result` defaulting to 0; its value after each call is interpreted as a boolean result, with non-0 meant to indicate
+a value is on the stack.

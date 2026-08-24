@@ -10,12 +10,13 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectScaleParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to scaling operations on a display object, available through a [handle][native.C.PublicTypes].
 
- These are method params related to scalings, whose functions have signature `method( const CoronaDisplayObject * self, void * userData, float sx, float sy, int isNew )`.
-*/
+The bookends have signature:
+
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, float sx, float sy, int isNew )
+``````

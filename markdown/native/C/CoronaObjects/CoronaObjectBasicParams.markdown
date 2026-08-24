@@ -10,12 +10,13 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectBasicParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to operations on a display object, available through a [handle][native.C.PublicTypes].
 
- This is for the most basic method params, whose functions have signature `method( const CoronaDisplayObject * self, void * userData )`.
-*/
+The bookends have signature:
+
+``````c
+void (*method)( CoronaDisplayObject * self, void * userData )`
+``````

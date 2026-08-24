@@ -5,12 +5,15 @@
 > __Keywords__			CORONA_NATIVE_PRODUCT, C, CoronaGraphics.h, CoronaObjectsPushEmbossedText
 > __See also__			[CoronaObjects.h][native.C.CoronaObjects]
 >						[Corona C Functions][native.C]
+>                       [display.newEmbossedText][api.library.display.newEmbossedText]
 > --------------------- ------------------------------------------------------------------------------------------
 
 
 ## Overview
 
 WIP WIP WIP
+
+(**TODO** consider deprecating, per comments in CoronaObjectParams)
 
 /**
  This behaves like `display.newEmbossedText()` but allows method customization.

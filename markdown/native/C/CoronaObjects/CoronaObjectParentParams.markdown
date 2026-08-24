@@ -10,12 +10,13 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectParentParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to operations between a display object and its parent group, each available through a [handle][native.C.PublicTypes].
 
- These are method params related to parenting, whose functions have signature `method( const CoronaDisplayObject * self, void * userData, lua_State * L, const CoronaGroupObject * groupObject )`.
-*/
+The bookends have signature:
+
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, lua_State * L, const CoronaGroupObject * groupObject )`
+``````

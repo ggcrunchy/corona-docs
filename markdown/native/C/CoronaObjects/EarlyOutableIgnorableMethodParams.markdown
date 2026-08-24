@@ -10,37 +10,33 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-... "Like IgnorableMethodParams" ...
-but can take "before" results into consideration
+A params struct following this interface may be used to augment and / or override a built-in display object method.
 
- This may also be used to augment and/or override a built-in method. When `before` logic is
- provided, getting certain results might rule out any meaningful follow-up behavior, so early-outs
- are available.
+Unlike the similar [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams], the `before` bookend is
+given some special consideration: given a certain result, there might not be a meaningful way to continue, so early
+exits are available.
 
- With a given method, this can take on the form:
+The call takes on the following form, in pseudo-code:
  
- ```
-   local result = default
-   if before then
-     result = before( ..., result )
-     if CanEarlyOut( result ) then
-      return result
-     end
-   end
-   result = original( ..., result );
-   result = after( ..., result );
- ```
+``````lua
+local result = default
+if before then
+	result = before( self, userData, ..., result )
+	if CanEarlyOut( result ) then
+		return result
+	end
+end
+result = original( ..., result )
+result = after( self, userData, ..., result )
+``````
  
- where all three functions take the same arguments.
+where the `...` are any arguments common to all three functions.
 
- At the moment, the `CanEarlyOut` predicate is either "result was true" (`earlyOutIfNonZero`)
- or "result was false".
+The `CanEarlyOut` predicate may currently be either "result was true" (non-0) or "result was false" (0).
 
- The `before` and `after` functions may be NULL, in which case the respective function is
- not called. Similarly, the stock behavior is skipped if `ignoreOriginal` is non-0.
-*/
+Any / all of these function calls may be omitted, as described below.
 
 
 ## Syntax
@@ -57,7 +53,7 @@ typedef struct
 ``````
 
 The names `EarlyOutableIgnorableMethodParams_TYPE` and `EarlyOutableIgnorableMethodParamsBookend_FUNC` are placeholders for the actual struct implementing this interface, and
-its corresponding bookend functions with a specific function pointer signature.
+its corresponding bookend functions;the name refers to them being called on each side of the original&mdash;with a specific function pointer signature.
 
 ##### header  ~^(required)^~
 [Header][native.C.CoronaObjects.CoronaObjectParamsHeader] common to all params structs, used to stitch them into the list used to [build a method stream][native.C.CoronaObjects.CoronaObjectsBuildMethodStream].
@@ -72,7 +68,7 @@ If not `NULL`, this is called after the method's built-in behavior.
 If this is non-0, the stock behavior for this method&mdash;`original( ... )` in the code snippet above&mdash;is skipped.
 
 ##### earlyOutIfNonZero ~^(optional)^~
-TODO
+If this is non-0, the `CanEarlyOut()` predicate is "result was true". Otherwise, the predicate is "result was false".
 
 ##### separateScopes ~^(optional)^~
 (**TODO** "for possible future use"; deals with handle-scoping, used by the various methods)

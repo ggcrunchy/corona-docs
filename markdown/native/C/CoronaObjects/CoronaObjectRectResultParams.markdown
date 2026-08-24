@@ -10,12 +10,17 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectRectResultParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to rectangle-based operations on a display object, available through a [handle][native.C.PublicTypes].
 
- These are method params related to rectangular outputs, whose functions have signature `method( const CoronaDisplayObject * self, void * userData, float * xMin, float * yMin, float * xMax, float * yMax )`.
-*/
+The bookends have signature:
+
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, float * xMin, float * yMin, float * xMax, float * yMax )
+``````
+
+and the current corners of the rectangle may be written.
+
+

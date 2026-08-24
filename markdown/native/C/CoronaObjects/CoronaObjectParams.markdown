@@ -12,6 +12,11 @@
 
 WIP WIP WIP
 
+(**TODO** this was poorly named in that it looks like method params; also, while this union was meant to prevent
+a combinatorial explosion of Push() functions + method lists, probably the way to go is a couple of factories, one
+for each of these two options, and an enum of the types as one argument; and with that this and the existing Push()s
+probably want to be considered deprecated)
+
 **
  This structure describes the method customizations for a new display object.
 */

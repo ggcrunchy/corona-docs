@@ -10,12 +10,13 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- CoronaObjectRotateParams
- 
- Implements the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface.
+These params implement the [IgnorableMethodParams][native.C.CoronaObjects.IgnorableMethodParams] interface, and
+pertain to rotation operations on a display object, available through a [handle][native.C.PublicTypes].
 
- These are method params related to rotations, whose functions have signature `method( const CoronaDisplayObject * self, void * userData, float delta )`.
-*/
+The bookends have signature:
+
+``````c
+void (*method)( const CoronaDisplayObject * self, void * userData, float delta )
+``````

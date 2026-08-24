@@ -5,6 +5,7 @@
 > __Keywords__			CORONA_NATIVE_PRODUCT, C, CoronaGraphics.h, CoronaObjectsPushSnapshot
 > __See also__			[CoronaObjects.h][native.C.CoronaObjects]
 >						[Corona C Functions][native.C]
+>                       [display.newSnapshot][api.library.display.newSnapshot]
 > --------------------- ------------------------------------------------------------------------------------------
 
 
@@ -12,7 +13,8 @@
 
 WIP WIP WIP
 
-[display.newEmitter][api.library.display.newEmitter]
+(**TODO** consider deprecating, per comments in CoronaObjectParams)
+
 /**
  This behaves like `display.newSnapshot()` but allows method customization.
  
