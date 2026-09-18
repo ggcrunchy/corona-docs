@@ -12,6 +12,10 @@
 
 WIP WIP WIP
 
+(**TODO** this sounds like an action, and is extra-confusing given the presence of CoronaMemoryAcquireInterface...
+maybe something like CoronaMemoryAcquisitionState would be better? the existing name could be deprecated typedef'd
+to that in the meantime...)
+
 /**
 	This structure maintains some details needed by the memory interface after an acquisition, as well
 	as the workspace provided for the underlying methods.

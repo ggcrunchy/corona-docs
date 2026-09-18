@@ -10,33 +10,34 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-(**TODO** this was poorly named in that it looks like method params; also, while this union was meant to prevent
-a combinatorial explosion of Push() functions + method lists, probably the way to go is a couple of factories, one
-for each of these two options, and an enum of the types as one argument; and with that this and the existing Push()s
-probably want to be considered deprecated)
+This is used to supply a method stream to be picked up by a new display object, via one of `CoronaObjectsPush*()` functions.
 
-**
- This structure describes the method customizations for a new display object.
-*/
+(**TODO** This was poorly named; it sounds one of the method params struct. Also, while this union was meant to prevent
+a combinatorial explosion of Push() functions + method lists, probably the way to go is a couple of functions, one each
+for the two options below, and an enum of the stock display object types as an argument in each case, reducing the load
+from this struct and 13 functions to an enum and 2 functions, with this and the Push()s then considered deprecated.)
+
+
+## Syntax
+
+``````c
 typedef struct CoronaObjectParams {
     union {
-        /**
-         A chain of method parameters. This is suitable for temporary situations, for instance
-         if the parameters are on the stack. A dedicated method stream is built for the object
-         when pushed.
-        */
         CoronaObjectParamsHeader * head;
-
-        /**
-         A Lua reference returned by `CoronaObjectsBuildMethodStream()`.
-        */
         int ref;
     } u;
-    
-    /**
-     If non-0, the method parameter chain is represented by `ref`; else `head`.
-    */
     int useRef;
 } CoronaObjectParams;
+``````
+
+##### u.head ~^(optional)^~
+A chain of method parameters, just as would be prepared to [build a method stream][native.C.CoronaObjects.CoronaObjectsBuildMethodStream].
+This is suitable for one-shot custom objects and avoids the need to keep a stream reference.
+
+##### u.ref ~^(optional)^~
+A Lua reference as returned by [CoronaObjectsBuildMethodStream][native.C.CoronaObjects.CoronaObjectsBuildMethodStream], to use an existing set of methods.
+
+##### useRef ~^(required)^~
+If non-0, the `ref` representation is used, and required. Otherwise, `head` is used.

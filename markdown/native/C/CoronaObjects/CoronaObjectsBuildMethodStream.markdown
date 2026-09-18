@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaObjectsBuildMethodStream( lua_State * L, const CoronaObjectParamsHeader * head );
+
 /**
  Build an immutable stream that may be shared among multiple objects.
  @param head The first in a chain of parameters, ending when a `next` of `NULL` is found.

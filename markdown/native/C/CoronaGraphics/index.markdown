@@ -187,3 +187,5 @@ tex:releaseSelf()
 When the texture is created, callbacks will not be instantly called. Corona creates textures between frames and only when they're required. Also, after `texture:releaseSelf()` is called, `texture` is not necessarily released&nbsp;&mdash; only this Lua __reference__ is. If any display objects are using the texture, it will not be released, such that they can still be rendered correctly.
 
 </div>
+
+(**TODO**) commands; effect data types; shader ops; state blocks; custom formats; matrices

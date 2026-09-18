@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaObjectInvalidate( const CoronaDisplayObject * object )
+
 /**
  Invalidate an object in the display hierachy.
  @param object Boxed display object.

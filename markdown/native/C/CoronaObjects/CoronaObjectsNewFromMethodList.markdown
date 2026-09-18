@@ -1,17 +1,18 @@
-# CoronaObjectsPushContainer()
+# CoronaObjectsNewFromMethodList()
 
 > --------------------- ------------------------------------------------------------------------------------------
 > __Revision__			[REVISION_LABEL](REVISION_URL)
-> __Keywords__			CORONA_NATIVE_PRODUCT, C, CoronaGraphics.h, CoronaObjectsPushContainer
+> __Keywords__			CORONA_NATIVE_PRODUCT, C, CoronaGraphics.h, CoronaObjectsNewFromMethodList
 > __See also__			[CoronaObjects.h][native.C.CoronaObjects]
 >						[Corona C Functions][native.C]
->                       [display.newContainer][api.library.display.newContainer]
 > --------------------- ------------------------------------------------------------------------------------------
 
 
 ## Overview
 
 WIP WIP WIP
+
+(**NYI** conceptual; does not exist!)
 
 (**TODO** consider deprecating, per comments in CoronaObjectParams)
 

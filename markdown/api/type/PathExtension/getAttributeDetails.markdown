@@ -28,7 +28,7 @@ This is the number of components belonging to the attribute, an integer from 1 t
 ##### offset
 An integer offset, indicating where the attribute is located in the underlying geometry.
 
-(**TODO** native details)
+(**TODO** native details... presumably this is in the local stream)
 
 ##### normalized
 

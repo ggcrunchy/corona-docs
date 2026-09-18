@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaObjectSendMessage( const CoronaDisplayObject * object, const char * message, const void * payload, unsigned int size );
+
 /**
  Send a message immediately to a given display object.
  @param object Boxed display object.

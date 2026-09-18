@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaMemoryBindLookupSlot( lua_State *L, unsigned short *id )
+
 /**
 	Given a memory proxy, as returned by `CoronaMemoryCreateInterface()`, on top of the stack,
 	associates it with a lookup slot. While the proxy is bound to the slot, encodings may be made

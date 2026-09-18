@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+(**TODO** consider if worth two functions, rather than params struct; kind of a wash, but maybe clearer)
+
 int CoronaCommandBufferWriteNamedUniform( const CoronaCommandBuffer * commandBuffer, const char * uniformName, const CoronaWriteUniformParams * params, unsigned int size );
 
 /**

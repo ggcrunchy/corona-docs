@@ -10,7 +10,7 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
 Enumerated type describing a given Solar display object method. Generally these map to underlying `virtual` methods.
 

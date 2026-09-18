@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaMemoryPushLookupEncoding( lua_State *L, unsigned short id, unsigned short context )
+
 /**
 	Encode an ID / context pair as a light userdata.
 	If `CoronaMemoryAcquireInterface()` encounters such a value, it will use the proxy bound to the ID. Furthermore, before

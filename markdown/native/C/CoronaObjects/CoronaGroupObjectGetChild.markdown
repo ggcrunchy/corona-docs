@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaGroupObjectGetChild( const CoronaGroupObject * groupObject, int index, const CoronaDisplayObject* child )
+
 /**
  @param groupObject Boxed group object.
  @param index Index of child belonging to `groupObject`, from 0 to `numChildren`.

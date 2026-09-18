@@ -12,6 +12,10 @@
 
 WIP WIP WIP
 
+(**TODO** name-wise, this sounds a bit too like CoronaMemoryInterface and like it plays more of an active part...
+something more like CoronaMemoryInterfaceCreationInfo might be better? the existing name could be deprecated but
+typedef'd to that in the meantime...)
+
 /**
  This structure provides the information needed to create an interface.
 */

@@ -12,9 +12,10 @@
 
 WIP WIP WIP
 
-int CoronaGeometrySetComponentWriter ( const CoronaRenderer * renderer, const char * name, CoronaGeometryComponentWriter writer, const void * context, int update ) CORONA_PUBLIC_SUFFIX;
 
 typedef void (*CoronaGeometryComponentWriter)( void * dest, const void * context, const CoronaGeometryMappingLayout * layout, unsigned int index, unsigned int n );
+
+int CoronaGeometrySetComponentWriter ( const CoronaRenderer * renderer, const char * name, CoronaGeometryComponentWriter writer, const void * context, int update );
 
 /**
  Operation performed when submitting geometry, used to assign or modify a specific component or attribute.

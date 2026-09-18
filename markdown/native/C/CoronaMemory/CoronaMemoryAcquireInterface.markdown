@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaMemoryAcquireInterface( lua_State *L, int arg, CoronaMemoryAcquireState *state )
+
 /**
 	Acquire a reference to the memory interface of an object on the stack, in order to read from and / or
 	write to its memory.

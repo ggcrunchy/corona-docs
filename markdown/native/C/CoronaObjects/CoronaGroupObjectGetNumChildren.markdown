@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaGroupObjectGetNumChildren( const CoronaGroupObject * groupObject )
+
 /**
  @param groupObject Boxed group object.
  @return Count of children (`numChildren`), if `groupObject` was valid (otherwise 0).

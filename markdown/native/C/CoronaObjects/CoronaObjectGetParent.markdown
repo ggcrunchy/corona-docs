@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaObjectGetParent( const CoronaDisplayObject * object, const CoronaGroupObject* parent )
+
 /**
  @param object Boxed display object.
  @param parent Handle to receive the parent. (Obtained from `CoronaObjectGetAvailableSlot`.)

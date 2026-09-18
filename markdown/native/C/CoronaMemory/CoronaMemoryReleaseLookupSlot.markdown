@@ -12,6 +12,8 @@
 
 WIP WIP WIP
 
+int CoronaMemoryReleaseLookupSlot( lua_State *L, unsigned short id )
+
 /**
 	Unbind a lookup slot and detach the proxy associated with it.
 	It is up to the caller to handle any lingering encodings made from `id`, which this will invalidate.

@@ -243,6 +243,10 @@ Density			 DPI
 
 `"gpuSupportsHighPrecisionFragmentShaders"` returns a boolean indicating whether `HIGHP` is supported in fragment shaders on this device.
 
+### maxExtraTextureUnits
+
+`"maxExtraTextureUnits"` returns the number of additional samplers that may be declared in a custom effect. Currently these are made available through composite paints (**TODO** link), and augment the set already supplied by `paint1` and `paint2`.
+
 ### maxVertexTextureUnits
 
 `"maxVertexTextureUnits"` returns the number of samplers that may be used in vertex shaders on this device. See __Vertex&nbsp;Textures__ in the  [Custom Shader Effects][guide.graphics.customEffects] guide.
@@ -253,8 +257,8 @@ Currently, returns either "glBackend" (some flavor of OpenGL) or "vulkanBackend"
 
 #### maxUniformVectorsCount
 
-`"maxUniformVectorsCount"` returns the number of `vec4` uniforms available for custom use in a vertex kernel. This is a "safe" count, so probably undercounts slightly. (It is difficult at best to determine
-ahead of time what built-in uniforms the shader compiler will link; it is pessimistically assumed that all of them get brought in.)
+`"maxUniformVectorsCount"` returns the number of `vec4` uniforms available for custom use in a vertex kernel. This is a "safe" count, likely to undercount slightly. (It is difficult at best to determine
+ahead of time what built-in uniforms the shader compiler will link; the count pessimistically assumes everything possible is included.)
 
 #### maxVertexAttributes
 

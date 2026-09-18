@@ -10,19 +10,30 @@
 
 ## Overview
 
-WIP WIP WIP
+WIP WIP WIPEE
 
-/**
- Each of the `CoronaObject*Params` structures has this as its first member, to effect C-style inheritance.
-*/
+This header structure is found as the first member of all object method param types, and is used to chain them together
+as a list (or "stream") of methods, containing a set of custom behaviors.
+
+A pointer to the first item in the chain may be supplied either through a [CoronaObjectParams][native.C.CoronaObjects.CoronaObjectParams] argument
+to a `CoronaObjectsPush*()` function, or when [building a method stream][native.C.CoronaObjects.CoronaObjectsBuildMethodStream].
+
+(**TODO** deprecating CoronaObjectParams, etc.)
+
+## Syntax
+
+``````c
 typedef struct CoronaObjectParamsHeader {
-    /**
-     Link to the next method parameter structure in the chain, or `NULL` if this is the last one.
-    */
     struct CoronaObjectParamsHeader * next;
-    
-    /**
-     The appropriate member of `CoronaObjectAugmentedMethod` that identifies the payload that follows.
-    */
-    unsigned short method; // n.b. quite generous: all methods fit easily within a byte
+    unsigned short method;
 } CoronaObjectParamsHeader;
+``````
+
+##### next ~^(optional)^~
+Pointer to the next params header in the stream. If absent, this is the last item.
+
+##### method ~^(required)^~
+A [method type][native.C.CoronaObjects.CoronaObjectAugmentedMethod] indicating what params type is being supplied.
+
+If this is `kAugmentedMethod_None`, this entry will be ignored. Otherwise, this must be the only instance of the method type
+present in the chain.

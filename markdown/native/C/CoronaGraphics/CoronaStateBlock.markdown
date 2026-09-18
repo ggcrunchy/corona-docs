@@ -38,7 +38,8 @@ If absent, the block is filled with `0`s.
 ##### userData ~^(optional)^~
 Data to be passed to the dirty state handlers. May be `NULL`. It must remain valid until recording has finished, since the last time it was written.
 
-This data is distinct from the contents, and does not figure into whether the block has changed.
+This data is distinct from the contents. Importantly, the contents themselves are compared to decide whether a block has changed, whereas the `userData`
+is not involved in this decision. It may be used for additional context, for example, or hold references to other information.
 
 ##### stateDirty ~^(required)^~
 This is called when recording a draw&mdash;after all of Solar's own business, as well as [effect callbacks][native.C.CoronaGraphics.CoronaEffectCallbacks]&mdash;if the contents have changed. In this primary use case (contrast `defaultStateDirty`), the `restore` parameter will be `0`.

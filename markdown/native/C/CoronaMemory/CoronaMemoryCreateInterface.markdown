@@ -12,6 +12,8 @@
 
 wIP WIP WIP
 
+int CoronaMemoryCreateInterface( lua_State *L, const CoronaMemoryInterfaceInfo *info )
+
 /**
 	Create an interface that may be used to provide access to objects' memory.
 	Details may be found under `CoronaMemoryInterfaceInfo` and `CoronaMemoryAcquireInterface()`.
